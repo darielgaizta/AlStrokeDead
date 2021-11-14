@@ -6,6 +6,7 @@
 #include "../boolean.h"
 #include "../state/state.h"
 
+extern int len_map;
 
 typedef int Petak;
 typedef struct pos *Address;
@@ -80,14 +81,24 @@ void AddTeleport(char *B, Map *M);
    ke petaknya masing-masing di map */
 /* Misal: file konfigurasi bertuliskan '3 10' -> AddTeleport("3 10", &M)
    maka, input Teleport(P) = 10 pada P yang memiliki Info(P) = 3 */
+/* Pembacaan '3 10' bisa menggunakan mesin karakter/kata */
 
 void AddInspect(char *B, Map *M);
 /* Membaca konfigurasi bagian inspect lalu append tiap petak */
 /* Misal: file konfigurasi bertuliskan '..#..#.' -> AddInspect("..#..#.", &M)
 	maka, AddPetak(&M, 1, '.'), AddPetak(&M, 2, '.'), AddPetak(&M, 3, '#'), dst.*/
+/* Pembacaan map '..#..#.'bisa menggunakan mesin karakter/kata */
 
 void LoadMap(Map *M, Map Dm);
 /* Map M menjadi Map Dm, Dm berasal dari State yang diload (pop) */
 /* Expected: mengandung fungsi AddTeleport dan AddInspect, tetapi bisa juga tidak */
+
+char * GetMap(Map M);
+/* Mengembalikan petak-petak pada map */
+/* Misal: char P[len_map];
+   P[0] = Inspect(A)
+   P[1] = Inspect(Next(A))
+   P[2] = Inspect(Next(Next(A)))
+   dst. */
 
 #endif

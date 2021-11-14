@@ -9,10 +9,12 @@
 #include "../state/state.h"
 #include "../skill/skill.h"
 
+extern int jml_pemain;
 
 typedef int Giliran;
 typedef struct PlayerStat* Status;
 typedef struct PlayerStat {
+   char * nama;
 	Giliran info;
 	Skill skillset;
 	Buff buffset;
@@ -33,6 +35,7 @@ typedef struct {
 #define Info(S) (S)->info
 #define Next(S) (S)->next
 #define First(P) (P)->first
+#define Nama(S) (S)->nama
 
 /* Contoh reverse-access pada map.h: Info(Address) = Posisi(Player) */
 /* Contoh mengambil teleporter: Info(Address) = Posisi(Status) -> Teleport(Address) != Nil */
@@ -40,12 +43,13 @@ typedef struct {
 
 /* =======================| Manajemen Memori  |================================== */
 
-Status AllocPlayer(Giliran X);
-/* Info(P1) = 1,
-   Posisi(P1) = (import ADT Map),
-   Skillset(P1) = (random),
-   Buff(P1) = ... ,
-   Next(P1) = Nil */
+Status AllocPlayer(Giliran X, char *Nama);
+/* Nama(P) = Nama
+   Info(P) = X,
+   Posisi(P) = (import ADT Map),
+   Skillset(P) = (random),
+   Buff(P) = ... ,
+   Next(P) = Nil */
 /* Mengirimkan Nil jika alokasi gagal */
 
 void DeallocPlayer(Status S);
@@ -66,10 +70,10 @@ boolean IsNoPlayer(Player P);
 
 /* =======================| Konfigurasi State |================================== */
 
-void AddPlayer(Player *P, Giliran X);
+void AddPlayer(Player *P, Giliran X, char *Nama);
 /* Jika belum ada pemain, Pemain 1 ditambahkan sehingga First(P) = P1 */
-/* Info(P1) = 1, Posisi(P1) = Start(M), Skillset(P1) = (random),
-   Buff(P1) = ... , Next(P1) = Nil
+/* Nama(P) = Nama Info(P) = X, Posisi(P) = Start(M),
+   Skillset(P) = (random), Buff(P) = ... , Next(P) = Nil
    Misal: X = 1 sehingga menambahkan Player 1 */
 /* Jika sudah ada pemain, maka Next(First(P1)) = P2 */
 /* Setiap pemain yang ditambahkan pasti dialokasikan terlebih dahulu */

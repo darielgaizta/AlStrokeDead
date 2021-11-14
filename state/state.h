@@ -61,11 +61,15 @@ void CreateState(State *S);
 void PushState(State *S, Player P, Map M, char *filename);
 /* Push data ke stack State dengan DPlayer(...) = P, DMap(...) = M
    FileConfig("...") = filename */
+/* BONUS: save State ke dalam Stack */
 
 void PopState(State *S, Player *Dp, Map *Dm, char **filename);
 /* Latest(...) didealokasikan */
 /* Dp berisi Latest(Dplayer(S)), Dm berisi Latest(DMap(S)),
    dan *filename adalah Latest(FileConfig(S)) */
 /* PopState ~ DelFirst */
+/* BONUS: load State dari Stack */
+
+// GAMEPLAY NOTE: Tiap rally (satu putaran) pastikan selalu PushState!
 
 #endif
