@@ -60,7 +60,7 @@ void ROLL(Player *P) {
 }
 
 void ENDTURN(State *S, Player *P) {
-	/* Apa maksudnya ENDTURN */
+	/* Apa maksudnya ENDTURN? */
 	/* Bagaimana skema jalannya permainan? */
 }
 
