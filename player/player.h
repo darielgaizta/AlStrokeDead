@@ -98,4 +98,9 @@ boolean IsGetTeleport(Map M, Player P);
 /* Mengembalikan True jika petak dengan Info(Address) = Posisi(Status)
    merupakan teleporter: Teleport(Address) != Nil */
 
+void LoadPLayer(Player *P, Player Dp);
+/* Player P menjadi Player Dp, Dp berasal dari State yang diload (pop) */
+/* Expected: P = Dp, atau CreatePlayer NewP lalu AddPlayer(&NewP, ...)
+   NOTE : (...) tergantung pada player di Dp */
+
 #endif

@@ -38,6 +38,7 @@ typedef struct {
 #define Latest(S) (S)->latest
 #define Next(P) (P)->next
 
+/* =======================| Manajemen Memori  |================================== */
 
 void AllocState(PData *PD, Player P, Map M, const char *filename);
 /* PData PD dialokasikan dengan DPlayer(PD) = P, DMap(PD) = M,
@@ -47,18 +48,24 @@ void AllocState(PData *PD, Player P, Map M, const char *filename);
 void DeallocState(PData P);
 /* Dealokasi PData */
 
+/* =======================|   Opening Game   |=================================== */
+
 boolean isStateEmpty(State S);
 /* Mengirimkan True jika state kosong */
 
 void CreateState(State *S);
 /* Membuat state kosong */
 
-void PushState(State *S, Player P, Map M, const char *filename);
+/* =======================| Konfigurasi State |================================== */
+
+void PushState(State *S, Player P, Map M, char *filename);
 /* Push data ke stack State dengan DPlayer(...) = P, DMap(...) = M
    FileConfig("...") = filename */
 
-void PopState(State *S);
+void PopState(State *S, Player *Dp, Map *Dm, char **filename);
 /* Latest(...) didealokasikan */
+/* Dp berisi Latest(Dplayer(S)), Dm berisi Latest(DMap(S)),
+   dan *filename adalah Latest(FileConfig(S)) */
 /* PopState ~ DelFirst */
 
 #endif

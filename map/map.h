@@ -75,10 +75,19 @@ Address Browse(Map M, Petak X);
 /* Mengirimkan address dari petak X */
 /* Jika tidak ditemukan, kirim Nil */
 
-void AddTeleport(char *filename, Map *M);
-/* Membaca konfigurasi bagian teleport lalu input semua teleport
+void AddTeleport(char *B, Map *M);
+/* Membaca konfigurasi bagian teleport baris per baris lalu input semua teleport
    ke petaknya masing-masing di map */
-/* Misal: file konfigurasi bertuliskan '3 10'
+/* Misal: file konfigurasi bertuliskan '3 10' -> AddTeleport("3 10", &M)
    maka, input Teleport(P) = 10 pada P yang memiliki Info(P) = 3 */
+
+void AddInspect(char *B, Map *M);
+/* Membaca konfigurasi bagian inspect lalu append tiap petak */
+/* Misal: file konfigurasi bertuliskan '..#..#.' -> AddInspect("..#..#.", &M)
+	maka, AddPetak(&M, 1, '.'), AddPetak(&M, 2, '.'), AddPetak(&M, 3, '#'), dst.*/
+
+void LoadMap(Map *M, Map Dm);
+/* Map M menjadi Map Dm, Dm berasal dari State yang diload (pop) */
+/* Expected: mengandung fungsi AddTeleport dan AddInspect, tetapi bisa juga tidak */
 
 #endif
