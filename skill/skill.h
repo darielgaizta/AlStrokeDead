@@ -34,12 +34,12 @@ boolean IsSkillEmpty(Skill S);
 
 /* =======================| Manajemen Memori  |================================== */
 
-SkElmt Alokasi (SkType T);
+SkElmt AllocSkill (SkType T);
 /* Mengirimkan SkElmt hasil alokasi dari SkType */
 /* Jika alokasi berhasil, Type(E) = T, Next(E) = Nil*/
 /* Jika alokasi gagal, kirim Nil */
 
-void Dealokasi (SkElmt *E);
+void DeallocSkill (SkElmt *E);
 /* free(E) */
 
 /* =======================|    Akses Skill    |================================== */
