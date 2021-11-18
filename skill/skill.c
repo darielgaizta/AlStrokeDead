@@ -18,7 +18,7 @@ void CreateEmpty (TabSkill *L){
 
 /* =======================| Manajemen Memori  |================================== */
 Skill Alokasi (Skillnb X){
-    Skill P = (Skill*) malloc (sizeof(Skill)) ;
+    GetSkill *P = (GetSkill *) malloc (sizeof(GetSkill)) ;
     if (P != Nil) {
         Info(P) = X ;
         Next(P) = Nil ;
@@ -224,6 +224,7 @@ void DelAfter (TabSkill *L, Skill *SkillEl, Skill Prec){
         }
     }
 }
+
 /* I.S. TabSKill tidak kosong. Prec adalah anggota list. */
 /* F.S. Menghapus Next(Prec): */
 /*      SkillEl adalah alamat elemen list yang dihapus  */

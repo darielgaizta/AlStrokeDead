@@ -10,18 +10,18 @@ typedef int Skillnb;
 typedef struct { 
     int IdSkill;
     char Nama[100];
-} Skill;
+} aSkill;
 
 typedef struct {
-    Skill TI [10]; 
+    aSkill TI [10]; 
     int Neff; 
 } sSkill;
 
 typedef struct tTabSkill *Skill;
 typedef struct tTabSkill { 
 	Skillnb info;
-	Skill next;
-	Skill prev;
+	Skill Next;
+	Skill Prev;
 } GetSkill;
 typedef struct {
 	Skill First;
@@ -29,9 +29,9 @@ typedef struct {
 } TabSkill; 
 
 #define Info(P) (P)->info
-#define Next(E) (E)->next
-#define Prev(P) (P)->prev
-#define First(S) ((S).first)
+#define Next(E) (E)->Next
+#define Prev(P) (P)->Prev
+#define First(S) ((S).First)
 #define Last(S) ((S).Last)
 
 /* =======================|   Opening Game   |=================================== */
