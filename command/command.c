@@ -21,7 +21,7 @@ void ENDTURN();
 
 void UNDO();
 
-void LogCommand();
+void LogCommand()
 /* IO file log_command.txt yang berisi command terbaru */
 /* Expected: log_command.txt hanya berisi satu command */
 {
