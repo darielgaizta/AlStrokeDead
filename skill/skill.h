@@ -8,8 +8,7 @@
 
 typedef int Skillnb;
 typedef struct { 
-    int IdSkill;
-    char Nama[100];
+    char * Nama;
 } aSkill;
 
 typedef struct {
@@ -19,6 +18,7 @@ typedef struct {
 
 typedef struct tTabSkill *Skill;
 typedef struct tTabSkill { 
+	sSkill skillset;
 	Skillnb info;
 	Skill Next;
 	Skill Prev;
@@ -33,6 +33,11 @@ typedef struct {
 #define Prev(P) (P)->Prev
 #define First(S) ((S).First)
 #define Last(S) ((S).Last)
+
+/* Akses skill pemain */
+#define SkillSet(S) (S)->skillset
+#define LenSkill(S) (S).Neff
+#define ElmtSkill(S,i) ((S).TI[(i)].Nama)
 
 /* =======================|   Opening Game   |=================================== */
 
@@ -60,6 +65,24 @@ Skill Search (TabSkill L, Skillnb X);
 /* Mencari apakah ada elemen list dengan Info(P)=X */
 /* Jika ada, mengirimkan Skill elemen tersebut. */
 /* Jika tidak ada, mengirimkan Nil */
+
+sSkill DedicateSkill(char * Nama);
+/* Membuat skillset baru dan memberikannya ke SkillSet(P)*/
+
+boolean FindSkill(sSkill S, char * X);
+/* Mengirimkan True jika skill X ditemukan di S */
+
+void AddSkill (sSkill *S, char * X);
+/* Menambahkan skill X ke skillset pemain */
+
+void DelSkill (sSkill *S, int Idx);
+/* Menghapus ElmtSkill(*S,Idx) dari skillset pemain */
+
+void ShowSkill(sSkill S);
+/* Menampilkan semua skill yang DIMILIKI pemain */
+
+char * GenerateSkill(Skillnb X);
+/* Menghasilkan nama skill yang di-randomized */
 
 /****************** PRIMITIF BERDASARKAN NILAI ******************/
 /*** PENAMBAHAN ELEMEN ***/

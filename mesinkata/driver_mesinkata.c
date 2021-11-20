@@ -6,9 +6,10 @@
 
 int main(int argc, char const *argv[])
 {
-	STARTKATA("Test.txt");
+	STARTKATA("../map/konfigurasi.txt");
 	while(!EndKata) {
 		printKata(CKata);
+		// printf("## %s ##\n", CKata.TabKata);
 		ADVKATA();
 	}
 

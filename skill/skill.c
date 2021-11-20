@@ -1,6 +1,9 @@
-#include "../skill/skill.h"
+#include "skill.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <time.h>
 
 /* =======================|   Opening Game   |=================================== */
 boolean IsEmpty (TabSkill L){
@@ -20,10 +23,11 @@ void CreateEmpty (TabSkill *L){
 Skill Alokasi (Skillnb X){
     GetSkill *P = (GetSkill *) malloc (sizeof(GetSkill)) ;
     if (P != Nil) {
-        Info(P) = X ;
-        Next(P) = Nil ;
-        Prev(P) = Nil ;
-        return P ;
+        Info(P) = X;
+        Next(P) = Nil;
+        Prev(P) = Nil;
+        SkillSet(P) = DedicateSkill(GenerateSkill(X));
+        return P;
     }
     else {
         return Nil ;
@@ -56,6 +60,86 @@ Skill Search (TabSkill L, Skillnb X){
 /* Mencari apakah ada elemen list dengan Info(P)=X */
 /* Jika ada, mengirimkan Skill elemen tersebut. */
 /* Jika tidak ada, mengirimkan Nil */
+
+sSkill DedicateSkill(char * Nama)
+/* Membuat skillset baru dan memberikannya ke SkillSet(P) */
+/* Digunakan ketika pemain pertama kali dibuat */
+/* Inisialisasi ElmtSkill(ss, 0)=Nama */
+{
+    sSkill ss;
+    LenSkill(ss) = 1;
+    ElmtSkill(ss,0) = Nama;
+    return ss;
+}
+
+boolean FindSkill(sSkill S, char * X)
+/* Mengirimkan True jika skill X ditemukan di S */
+{
+    int i;
+    for (i = 0; i < LenSkill(S); i++) {
+        if (strcmp(ElmtSkill(S,i), X) == 0) {
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+void AddSkill (sSkill *S, char * X)
+/* Menambahkan skill X ke skillset pemain */
+{
+    if (LenSkill(*S) < 10) {
+        ElmtSkill(*S, LenSkill(*S)) = X;
+        LenSkill(*S)++;
+    }
+}
+
+void DelSkill (sSkill *S, int Idx)
+/* Menghapus ElmtSkill(*S,Idx) dari skillset pemain */
+{
+    /* Skema replace-mereplace */
+    int i;
+    if ((LenSkill(*S) - Idx-1) == 1) {
+        ElmtSkill(*S,Idx-1) = '\0';
+    }
+    for (i = Idx-1; i < LenSkill(*S)-1; i++) {
+        ElmtSkill(*S,i) = ElmtSkill(*S,i+1);
+    }
+    LenSkill(*S)--;
+}
+
+void ShowSkill(sSkill S)
+/* Menampilkan semua skill yang DIMILIKI pemain */
+{
+    int i;
+    printf("\n=======================|   Daftar Skill    |==================================\n");
+    for (i = 0; i < LenSkill(S); i++) {
+        printf("[%d] %s\n", (i+1), ElmtSkill(S,i));
+    }
+    printf("\n");
+}
+
+char * GenerateSkill(Skillnb X)
+/* Menghasilkan nama skill yang di-randomized */
+{
+    char * n;
+    srand(time(0));
+    int rint = rand();
+    if ((rint % 6) == 0) {
+        n = "Mesin Penukar Posisi";
+    } else if ((rint % 6) == 1) {
+        n = "Cermin Pengganda";
+    } else if ((rint % 6) == 2) {
+        n = "Pintu Ga Ke Mana Mana";
+    } else if ((rint % 6) == 3) {
+        n = "Senter Pengecil Hoki";
+    } else if ((rint % 6) == 4) {
+        n = "Senter Pembesar Hoki";
+    } else if ((rint % 6) == 5) {
+        n = "Teknologi Gagal (Junk)";
+    }
+    printf("Congratulations Player %d! You get: %s (Skill ID: %d)\n", X, n, rint);
+    return n;
+}
 
 /****************** PRIMITIF BERDASARKAN NILAI ******************/
 /*** PENAMBAHAN ELEMEN ***/
@@ -257,7 +341,7 @@ void PrintForward (TabSkill L){
             P = Next(P) ;
         }
     }
-    printf("]") ;
+    printf("]\n") ;
 }
 /* I.S. TabSkill mungkin kosong */
 /* F.S. Jika list tidak kosong, isi list dicetak dari elemen pertama */
@@ -277,7 +361,7 @@ void PrintBackward (TabSkill L){
             P = Prev(P) ;
         }
     }
-    printf("]") ;
+    printf("]\n") ;
 }
 /* I.S. TabSkill mungkin kosong */
 /* F.S. Jika list tidak kosong, isi list dicetak dari elemen terakhir */

@@ -17,7 +17,7 @@ void IgnoreBlank() {
 /* Mengabaikan satu atau beberapa BLANK
    I.S. : CC sembarang 
    F.S. : CC ≠ BLANK atau CC = MARK */
-	while (CC == BLANK && CC != MARK) {
+	while ((CC == BLANK || CC == '\n') && CC != MARK) {
 		ADV(); // Read next character
 	}
 }
