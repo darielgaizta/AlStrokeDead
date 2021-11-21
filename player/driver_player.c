@@ -2,7 +2,7 @@
 
 #include "player.c"
 #include "../skill/skill.c"
-#include "../command/command.c"
+// #include "../command/command.c"
 
 /* =======================|   Test Case #1   |=================================== */
 
@@ -57,6 +57,11 @@ int main(int argc, char const *argv[])
 	}
 
 	ShowPlayer(T);
+
+	Player P = FirstPlayer(T);
+	printf("Posisi Sekarang: %d\n", Position(P));
+	Move(&T, 1, 5);
+	printf("Posisi Setelah Pindah: %d\n", Position(P));
 
 	int z;
 	printf("\n[Input any key to continue]");

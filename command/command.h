@@ -14,7 +14,7 @@
 extern int LowerRoll;
 extern int UpperRoll;
 
-void SKILL(TabSkill *Ts, TabPlayer *Tp, int t);
+void SKILL(TabPlayer *Tp, sSkill *ss, int t);
 /* Menampilkan skill yang DIMILIKI pemain */
 /* Diberi pilihan untuk keluar, membuang, atau memakai skill */
 
@@ -44,5 +44,7 @@ void UNDO(State *S, TabPlayer *Tp);
 char * ReadLine();
 /* Mengembalikan sebuah string */
 /* Expected: IO sebuah command */
+
+
 
 #endif

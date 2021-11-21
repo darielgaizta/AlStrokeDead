@@ -21,7 +21,7 @@ void CreateEmpty (TabSkill *L){
 
 /* =======================| Manajemen Memori  |================================== */
 Skill Alokasi (Skillnb X){
-    GetSkill *P = (GetSkill *) malloc (sizeof(GetSkill)) ;
+    Skill P = (GetSkill *) malloc (sizeof(GetSkill)) ;
     if (P != Nil) {
         Info(P) = X;
         Next(P) = Nil;

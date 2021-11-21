@@ -4,15 +4,13 @@
 #include "../mesinkar/mesinkar.c"
 #include "../mesinkata/mesinkata.c"
 
-/*
 int main(int argc, char const *argv[])
 {
 	Config();
 	return 0;
 }
-*/
 
-
+/*
 int main(int argc, char const *argv[])
 {
 	int i;
@@ -39,3 +37,4 @@ int main(int argc, char const *argv[])
 
 	return 0;
 }
+*/

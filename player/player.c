@@ -70,7 +70,7 @@ Player SearchPlayer (TabPlayer T, int X)
 void Move (TabPlayer *T, int t, int p)
 /* Mengubah Position(P) dengan Turn(P)=t menjadi p */
 {
-	printf("Anda telah berpindah ke Petak %d\n", p);
+	printf("Player %d berpindah ke Petak %d\n", t, p);
 	Player P = SearchPlayer(*T, t);
 	Position(P) = p;
 }
@@ -206,7 +206,7 @@ void ShowPlayer (TabPlayer T)
 {
 	Player P; 
     P = FirstPlayer(T);
-    printf("\nDaftar pemain: ");
+    printf("\nDaftar pemain\t: ");
     printf("[");
     if (!IsEmptyPlayer(T)) {
         printf("%s", Name(P));
@@ -217,5 +217,5 @@ void ShowPlayer (TabPlayer T)
         }
     }
     printf("]\n");
-    printf("Jumlah pemain: %d\n", JML_PEMAIN);
+    printf("Jumlah pemain\t: %d\n", JML_PEMAIN);
 }

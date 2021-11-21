@@ -16,6 +16,7 @@ void LoadMap(Map *M, ArrayOfTeleporter *AoT)
 	counter = 0;
 	char MapLength[3];
 	START("konfigurasi.txt");
+	IgnoreBlank();
 	while (CC != BLANK && CC !='\n') {
 		MapLength[i] = CC;
 		counter++;

@@ -10,17 +10,11 @@
 int LowerRoll;
 int UpperRoll;
 
-void SKILL(TabSkill *Ts, TabPlayer *Tp, int t)
+void SKILL(TabPlayer *Tp, sSkill *ss, int t)
 /* Menampilkan skill yang DIMILIKI pemain */
 /* Diberi pilihan untuk keluar, membuang, atau memakai skill */
 {
-    Skill S = First(*Ts);
-    while (Info(S) != t) {
-        S = Next(S);
-    }
-
-    sSkill ss = SkillSet(S);
-    ShowSkill(ss);
+    ShowSkill(*ss);
 
     int chosen_skill;
     printf("Apa yang ingin Anda lakukan?\n");
@@ -33,18 +27,18 @@ void SKILL(TabSkill *Ts, TabPlayer *Tp, int t)
         printf("Input: -1\t=> Anda membuang skill nomor [1]\n");
     } else {
         if (chosen_skill < 0) {
-            DelSkill(&ss, abs(chosen_skill));
+            DelSkill(ss, abs(chosen_skill));
             printf("Anda telah membuang skill [%d].\n", abs(chosen_skill));
         } else if (chosen_skill > 0) {
-            DelSkill(&ss, chosen_skill);
-            if (strcmp(ElmtSkill(ss, chosen_skill-1), "Pintu Ga Ke Mana Mana") == 0) {
+            DelSkill(ss, chosen_skill);
+            if (strcmp(ElmtSkill(*ss, chosen_skill-1), "Pintu Ga Ke Mana Mana") == 0) {
                 BUFF_AKTIF = "# Imunitas Teleport #"; // Activate Imunitas Teleport
-            } else if (strcmp(ElmtSkill(ss, chosen_skill-1), "Cermin Pengganda") == 0) {
-                AddSkill(&ss, GenerateSkill(Info(S)));
-                AddSkill(&ss, GenerateSkill(Info(S)));
-            } else if (strcmp(ElmtSkill(ss, chosen_skill-1), "Mesin Penukar Posisi") == 0) {
+            } else if (strcmp(ElmtSkill(*ss, chosen_skill-1), "Cermin Pengganda") == 0) {
+                AddSkill(ss, GenerateSkill(t));
+                AddSkill(ss, GenerateSkill(t));
+            } else if (strcmp(ElmtSkill(*ss, chosen_skill-1), "Mesin Penukar Posisi") == 0) {
                 int p;
-                printf("\n#======================[Ms Penukar Posisi]==================================#\n");
+                printf("######################  Ms. Penukar Posisi  ##################################\n");
                 printf("Silakan input ID (Turn) dari pemain yang ingin Anda tukar posisinya dengan Anda!\n");
                 printf("Masukkan ID: \n");
                 scanf("%d", &p);
@@ -60,11 +54,11 @@ void SKILL(TabSkill *Ts, TabPlayer *Tp, int t)
                 int pP2 = Position(P2);
                 Move(Tp, t, pP2);
                 Move(Tp, p, pP1);
-            } else if (strcmp(ElmtSkill(ss, chosen_skill-1), "Senter Pengecil Hoki") == 0) {
+            } else if (strcmp(ElmtSkill(*ss, chosen_skill-1), "Senter Pengecil Hoki") == 0) {
                 printf("Senter Pengecil Hoki diaktifkan.\n");
                 LowerRoll = 1;
                 UpperRoll = MaxRoll/2;
-            } else if (strcmp(ElmtSkill(ss, chosen_skill-1), "Senter Pembesar Hoki") == 0) {
+            } else if (strcmp(ElmtSkill(*ss, chosen_skill-1), "Senter Pembesar Hoki") == 0) {
                 printf("Senter Pembesar Hoki diaktifkan.\n");
                 LowerRoll = MaxRoll/2;
                 UpperRoll = MaxRoll;
@@ -84,7 +78,7 @@ void MAP(Map M, TabPlayer Tp)
     while (P != Nil) {
         printf("%s\t: ", Name(P));
         for (i = 0; i < NEff(M); i++) {
-            if (i == Position(P)) {
+            if (i == (Position(P)-1)) {
                 printf("*");
             } else {
                 printf("%c", Petak(M,i));
@@ -129,7 +123,7 @@ void INSPECT(Map M, ArrayOfTeleporter A)
     }
 
     /* Cek Petak Biasa */
-    printf("Bentuk Petak: %c\n", Petak(M,i));
+    printf("Bentuk Petak: %c\n", Petak(M,i-1));
 }
 
 void ROLL(Map M, int t, int p, int lower, int upper, TabPlayer *T)
@@ -173,6 +167,7 @@ void ENDTURN(State *S, int X, TabPlayer Tp, Player *P)
 {
     if (LastPlayer(Tp) == *P) {
         Push(S, X, Tp);
+        *P = FirstPlayer(Tp);
     } else {
         *P = NextPlayer(*P);
     }

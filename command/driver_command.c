@@ -24,6 +24,11 @@ int main(int argc, char const *argv[])
 	TabSkill L;
 	CreateEmpty(&L);
 
+	// Map M;
+	// ArrayOfTeleporter AoT;
+
+	// LoadMap(&M, &AoT);
+
 
 	int in;
 	printf("([0] Exit [1] Play!) => ");
@@ -41,16 +46,16 @@ int main(int argc, char const *argv[])
 				AddPlayer(&T, "Mobita-kun", (i+1), 1, L);
 			} else if (j == 2) {
 				InsVLast(&L, (i + 1));
-				AddPlayer(&T, "Emon-san", (i+1), 1, L);
+				AddPlayer(&T, "Emon-san", (i+1), 2, L);
 			} else if (j == 3) {
 				InsVLast(&L, (i + 1));
-				AddPlayer(&T, "Jayen-sama", (i+1), 1, L);
+				AddPlayer(&T, "Jayen-sama", (i+1), 3, L);
 			} else if (j == 4) {
 				InsVLast(&L, (i + 1));
-				AddPlayer(&T, "Suzuka-chan", (i+1), 1, L);
+				AddPlayer(&T, "Suzuka-chan", (i+1), 4, L);
 			} else if (j == 5) {
 				InsVLast(&L, (i + 1));
-				AddPlayer(&T, "Shizuneo-senpai", (i+1), 1, L);
+				AddPlayer(&T, "Shizuneo-senpai", (i+1), 5, L);
 			}
 		}
 	}
@@ -58,13 +63,27 @@ int main(int argc, char const *argv[])
 	ShowPlayer(T);
 
 	/* ====== Gameplay ====== */
-	Player P = FirstPlayer(T);
+	Skill s = Last(L);
+	sSkill ss = SkillSet(s);
+	Player P = LastPlayer(T);
 
-	SKILL(&L, &T, Turn(P));
+	SKILL(&T, &ss, Turn(P));
+	// TesDelete(&ss, Turn(P));
+	printf("Posisi sekarang: %d\n", Position(P));
+	printf("Kamu adalah player ke-%d\n", Turn(P));
 
-	Skill s = First(L);
+	printf("##########################################\n");
 
-	ShowSkill(SkillSet(s));
+	ShowSkill(ss);
+
+	printf("##########################################\n");
+
+	DelSkill(&ss, 1);
+	ShowSkill(ss);
+
+	printf("%d\n", Turn(P));
+	ENDTURN(&S, 1, T, &P);
+	printf("%d\n", Turn(P));
 
 
 
