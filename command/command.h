@@ -29,15 +29,15 @@ void INSPECT(Map M, ArrayOfTeleporter A);
 /* Menampilkan apakah suatu petak itu kosong,
    terlarang, atau memiliki teleporter */
 
-void ROLL(Map M, int t, int p, int lower, int upper, TabPlayer *T);
+void ROLL(Map M, int t, int p, int lower, int upper, TabPlayer *T, boolean *bMove);
 /* Generate random integer dari 1--MaxRoll */
 /* Pemain berpindah dengan fungsi Move() */
 
-void ENDTURN(State *S, int X, TabPlayer Tp, Player *P);
+void ENDTURN(State *S, int X, TabPlayer Tp, Player *P, TabSkill Ts);
 /* Mengakhiri turn pemain, turn berpindah ke NextPlayer */
 /* Jika LastPlayer sudah ENDTURN, state game disimpan (Push) */
 
-void UNDO(State *S, TabPlayer *Tp);
+void UNDO(State *S, TabPlayer *Tp, TabSkill *s);
 /* Mengembalikan state game ke akhir ronde sebelumnya */
 /* Skill yang didapat pemain akan direset */
 

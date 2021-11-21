@@ -5,7 +5,7 @@
 #include "state.h"
 
 /* =======================| Manajemen Memori  |================================== */
-void AlokasiState (address *addr, int X, TabPlayer P)
+void AlokasiState (address *addr, int X, TabPlayer P, TabSkill S)
 /* I.S. Sembarang */
 /* F.S. Alamat P dialokasi, jika berhasil maka StateID(S)=X, 
         dan StatePlayer(S)=P  */
@@ -15,6 +15,7 @@ void AlokasiState (address *addr, int X, TabPlayer P)
 	if(*addr != Nil){
 		StateID(*addr) = X;
 		StatePlayer(*addr) = P;
+		StateSkill(*addr) = S;
 		NextState(*addr) = Nil;
 	}
 }
@@ -41,7 +42,7 @@ void CreateEmptyState (State * S)
 	Top(*S) = Nil;
 }
 
-void Push (State * S, int X, TabPlayer P)
+void Push (State * S, int X, TabPlayer P, TabSkill s)
 /* Menambahkan X sebagai elemen State S */
 /* I.S. S mungkin kosong, X terdefinisi */
 /* F.S. X menjadi TOP yang baru jika alokasi X berhasil, */
@@ -49,7 +50,7 @@ void Push (State * S, int X, TabPlayer P)
 /* Pada dasarnya adalah operasi Insert First pada list linier */
 {
 	address addrState;
-	AlokasiState(&addrState, X, P);
+	AlokasiState(&addrState, X, P, s);
 	if (addrState != Nil) {
 		NextState(addrState) = Top(*S);
 		Top(*S) = addrState;

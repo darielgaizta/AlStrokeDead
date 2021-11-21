@@ -125,7 +125,7 @@ void INSPECT(Map M, ArrayOfTeleporter A)
     printf("Bentuk Petak: %c\n", Petak(M,i-1));
 }
 
-void ROLL(Map M, int t, int p, int lower, int upper, TabPlayer *T)
+void ROLL(Map M, int t, int p, int lower, int upper, TabPlayer *T, boolean *bMove)
 /* Generate random integer dari 1--MaxRoll */
 /* Pemain berpindah dengan fungsi Move() */
 {
@@ -147,6 +147,7 @@ void ROLL(Map M, int t, int p, int lower, int upper, TabPlayer *T)
         printf("Anda tidak bisa pergi ke mana-mana karena tidak ada petak yang tersedia.\n");
     } else {
         int move;
+        *bMove = TRUE;
         printf("Ingin kemana Anda berpindah: ");
         scanf("%d", &move);
 
@@ -159,19 +160,19 @@ void ROLL(Map M, int t, int p, int lower, int upper, TabPlayer *T)
 
 }
 
-void ENDTURN(State *S, int X, TabPlayer Tp, Player *P)
+void ENDTURN(State *S, int X, TabPlayer Tp, Player *P, TabSkill Ts)
 /* Mengakhiri turn pemain, turn berpindah ke NextPlayer */
 /* Jika LastPlayer sudah ENDTURN, state game disimpan (Push) */
 {
     if (LastPlayer(Tp) == *P) {
-        Push(S, X, Tp);
+        Push(S, X, Tp, Ts);
         *P = FirstPlayer(Tp);
     } else {
         *P = NextPlayer(*P);
     }
 }
 
-void UNDO(State *S, TabPlayer *Tp)
+void UNDO(State *S, TabPlayer *Tp, TabSkill *s)
 /* Mengembalikan state game ke akhir ronde sebelumnya */
 /* Skill yang didapat pemain akan direset */
 {
@@ -184,6 +185,7 @@ void UNDO(State *S, TabPlayer *Tp)
         ElmtStack E;
         Pop(S, &E);
         *Tp = Player(E);
+        *s = SkillS(E);
     } else {
         printf("UNDO dibatalkan.\n");
     }

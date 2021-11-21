@@ -10,6 +10,7 @@
 typedef struct {
 	int id;
 	TabPlayer players;
+	TabSkill skills;
 } ElmtStack;
 
 typedef struct tElmtState * address;
@@ -24,14 +25,16 @@ typedef struct {
 
 #define StateID(S) (((S)->infos).id)
 #define StatePlayer(S) (((S)->infos).players)
+#define StateSkill(S) (((S)->infos).skills)
 #define ID(E) ((E).id)
 #define Player(E) ((E).players)
+#define SkillS(E) ((E).skills)
 #define InfoState(S) (S)->infos
 #define NextState(S) (S)->nexts
 #define Top(S) ((S).tops)
 
 /* Prototype manajemen memori */
-void AlokasiState (address *addr, int X, TabPlayer P);
+void AlokasiState (address *addr, int X, TabPlayer P, TabSkill S);
 /* I.S. Sembarang */
 /* F.S. Alamat P dialokasi, jika berhasil maka Info(P)=X dan 
         Next(P)=Nil */
@@ -49,7 +52,7 @@ void CreateEmptyState (State * S);
 /* I.S. sembarang */ 
 /* F.S. Membuat sebuah stack S yang kosong */
 
-void Push (State * S, int X, TabPlayer P);
+void Push (State * S, int X, TabPlayer P, TabSkill s);
 /* Menambahkan X sebagai elemen State S */
 /* I.S. S mungkin kosong, X terdefinisi */
 /* F.S. X menjadi TOP yang baru jika alokasi X berhasil, */

@@ -82,8 +82,28 @@ int main(int argc, char const *argv[])
 	ShowSkill(ss);
 
 	printf("%d\n", Turn(P));
-	ENDTURN(&S, 1, T, &P);
+	ENDTURN(&S, 1, T, &P, L);
 	printf("%d\n", Turn(P));
+
+	s = First(L);
+	ss =SkillSet(s);
+
+	AddSkill(&ss, GenerateSkill(Turn(P)));
+	AddSkill(&ss, GenerateSkill(Turn(P)));
+
+	SKILL(&T, &ss, Turn(P));
+
+	UNDO(&S, &T, &L);
+	s = First(L);
+	ss =SkillSet(s);
+	ShowSkill(ss);
+
+
+	printf("%d\n", Turn(P));
+	ENDTURN(&S, 2, T, &P, L);
+	printf("%d\n", Turn(P));
+
+
 
 
 
@@ -91,7 +111,7 @@ int main(int argc, char const *argv[])
 		printf("([0] Keluar [1] Save [2] Load) => ");
 		scanf("%d", &in);
 		if (in == 1) {
-			Push(&S, 1, T);
+			Push(&S, 1, T, L);
 		} else if (in == 2) {
 			ElmtStack E;
 			Pop(&S, &E);

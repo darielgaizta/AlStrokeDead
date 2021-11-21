@@ -94,17 +94,20 @@ int main(int argc, char const *argv[])
 
 		Skill  s = First(Ts);
 		Player P = FirstPlayer(Tp);
+		boolean isMove = FALSE;
 		boolean isPlaying = TRUE;
 		boolean isEndTurn = FALSE;
 
 		char com[20];
-		int buff, round = 1;
+		int buff = -1, round = 1;
 		int count = 1-JML_PEMAIN;
 
 		while (isPlaying) {
+
 			MAP(M, Tp);
 			LowerRoll = 1;
 			UpperRoll = MaxRoll;
+			isMove = FALSE;
 			isEndTurn = FALSE;
 			sSkill ss = SkillSet(s);
 			boolean isRolled = FALSE;
@@ -120,35 +123,72 @@ int main(int argc, char const *argv[])
 				if (strcmp(com, "SKILL") == 0) {
 					SKILL(&Tp, &ss, Turn(P));
 					SkillSet(s) = ss;
+
 				} else if (strcmp(com, "MAP") == 0) {
 					MAP(M, Tp);
+
 				} else if (strcmp(com, "BUFF") == 0) {
 					buff = BUFF();
+
 				} else if (strcmp(com, "INSPECT") == 0) {
 					INSPECT(M, AoT);
+
 				} else if (strcmp(com, "ROLL") == 0) {
 					if (!isRolled) {
-						ROLL(M, Turn(P), Position(P), LowerRoll, UpperRoll, &Tp);
+						ROLL(M, Turn(P), Position(P), LowerRoll, UpperRoll, &Tp, &isMove);
 						isRolled = TRUE;
+
+						/* Teleporter Check */
+						if (isMove) {
+							for (i = 0; i < NEff(AoT); i++) {
+								if (TelIn(AoT, i) == Position(P)) {
+									printf("Petak %d memiliki teleporter menuju Petak %d\n", TelIn(AoT,i), TelOut(AoT,i));
+
+									/* Imunitas Teleport Check */
+									if (strcmp(BUFF_AKTIF, "# Imunitas Teleport #") == 0) {
+										printf("Anda memiliki buff # Imunitas Teleport #. Apakah Anda ingin teleport?\n");
+										printf("([0] Tidak [1] Ya!) => ");
+										scanf("%d", &in);
+										if (in) {
+											Move(&Tp, Turn(P), TelOut(AoT,i));
+											BUFF_AKTIF = "Tidak ada.";
+										}
+									} else {
+										Move(&Tp, Turn(P), TelOut(AoT,i));
+									}
+									break;
+								}
+							}
+						}
 						if (Position(P) == NEff(M)) {
 							isPlaying = FALSE;
 						}
 					}
+
 				} else if (strcmp(com, "ENDTURN") == 0) {
-					if (isRolled) {
-						ENDTURN(&S, round, Tp, &P);
-						isEndTurn = TRUE;
-						count++;
-						if (s == Last(Ts)) {
-							s = First(Ts);
+					if (isPlaying) {
+						if (isRolled) {
+							ENDTURN(&S, round, Tp, &P, Ts);
+							isEndTurn = TRUE;
+							count++;
+							if (s == Last(Ts)) {
+								s = First(Ts);
+							} else {
+								s = Next(s);
+							}
 						} else {
-							s = Next(s);
+							printf("Silakan ROLL terlebih dahulu.\n");
 						}
 					} else {
-						printf("Silakan ROLL terlebih dahulu.\n");
+						isEndTurn = TRUE;
 					}
+
 				} else if (strcmp(com, "UNDO") == 0) {
-					UNDO(&S, &Tp);
+					UNDO(&S, &Tp, &Ts);
+					P = FirstPlayer(Tp);
+					s = First(Ts);
+					isEndTurn = TRUE;
+
 				} else {
 					printf("Input tidak valid.\n");
 				}
@@ -156,14 +196,20 @@ int main(int argc, char const *argv[])
 			}
 
 			/* End of Game: if Position(P) = NEff(M) */
-			/* Bug => Teleporter + Buff + UNDO */
+			/* Bug => UNDO */
 			
 		}
+
+		printf("\n##########################################################\n");
+		printf("CONGRATULATIONS, %s! You are among the legends!\n", Name(P));
+		printf("##########################################################\n");
+		printf("\nFinal position:\n");
+		MAP(M, Tp);
 
 	}
 
 	/* End of Game */
-	printf("\nEnd of Game.\n");
+	printf("\n--- End of Game ---\n");
 	printf("Dear players, Thanks for playing Mobitangga Legends: Dor Dor. We would be pleased if you can send your feedback about this game to us. ");
 	printf("Let us know if you're happy while playing the game by sending us GoFood, GrabFood, etc. :D\n");
 	printf("Open for feedback: 182XXXXX@std.stei.itb.ac.id\n");
