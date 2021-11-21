@@ -22,7 +22,6 @@ void SKILL(TabPlayer *Tp, sSkill *ss, int t)
     scanf("%d", &chosen_skill);
 
     if (chosen_skill == 999) {
-        printf("\n=======================|       Help       |===================================\n");
         printf("Input: 1\t=> Anda menggunakan skill nomor [1]\n");
         printf("Input: -1\t=> Anda membuang skill nomor [1]\n");
     } else {
@@ -30,7 +29,6 @@ void SKILL(TabPlayer *Tp, sSkill *ss, int t)
             DelSkill(ss, abs(chosen_skill));
             printf("Anda telah membuang skill [%d].\n", abs(chosen_skill));
         } else if (chosen_skill > 0) {
-            DelSkill(ss, chosen_skill);
             if (strcmp(ElmtSkill(*ss, chosen_skill-1), "Pintu Ga Ke Mana Mana") == 0) {
                 BUFF_AKTIF = "# Imunitas Teleport #"; // Activate Imunitas Teleport
             } else if (strcmp(ElmtSkill(*ss, chosen_skill-1), "Cermin Pengganda") == 0) {
@@ -63,6 +61,7 @@ void SKILL(TabPlayer *Tp, sSkill *ss, int t)
                 LowerRoll = MaxRoll/2;
                 UpperRoll = MaxRoll;
             }
+            DelSkill(ss, chosen_skill);
         } else {
             /* keluar */
         }
@@ -136,25 +135,24 @@ void ROLL(Map M, int t, int p, int lower, int upper, TabPlayer *T)
 
     int counter = 1;
     int p1 = (p + val), p2 = (p - val);
-    printf("Ingin kemana Anda berpindah:\n");
-    if ((p1 >= 0) && (p1 < NEff(M)) && (Petak(M,p1) != '#')) {
-        printf("[A] Petak %d\n", p1);
+    if ((p1 > 0) && (p1 < NEff(M)) && (Petak(M,p1-1) != '#')) {
+        printf("[1] Petak %d\n", p1);
         counter++;
     }
-    if ((p2 >= 0) && (p2 < NEff(M)) && (Petak(M,p2) != '#')) {
-        printf("[B] Petak %d\n", p2);
+    if ((p2 > 0) && (p2 < NEff(M)) && (Petak(M,p2-1) != '#')) {
+        printf("[2] Petak %d\n", p2);
         counter++;
     }
     if (counter == 1) {
         printf("Anda tidak bisa pergi ke mana-mana karena tidak ada petak yang tersedia.\n");
     } else {
-        char move;
-        printf("Pilihan Anda >>> ");
-        scanf("%c", &move);
+        int move;
+        printf("Ingin kemana Anda berpindah: ");
+        scanf("%d", &move);
 
-        if (move == 'A') {
+        if (move == 1) {
             Move(T, t, p1);
-        } else if (move == 'B') {
+        } else if (move == 2) {
             Move(T, t, p2);
         }
     }

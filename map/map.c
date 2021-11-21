@@ -93,6 +93,9 @@ void LoadMap(Map *M, ArrayOfTeleporter *AoT)
 void Config()
 /* Menuliskan konfigurasi.txt berdasarkan format yang disediakan */
 {
+	printf("Set The Game's Configuration!\n");
+	printf("(check our documentation for configuration format)\n");
+	
 	FILE * F;
 	char c[100];
 	int i;

@@ -51,8 +51,6 @@ int main(int argc, char const *argv[])
 		exit(0);
 	} else {
 		/* Configuration */
-		printf("Set The Game's Configuration!\n");
-		printf("(check our documentation for configuration format)\n");
 		Config();
 
 		/* Set Variables */
@@ -98,17 +96,22 @@ int main(int argc, char const *argv[])
 		Player P = FirstPlayer(Tp);
 		boolean isPlaying = TRUE;
 		boolean isEndTurn = FALSE;
-		LowerRoll = 1;
-		UpperRoll = MaxRoll;
 
 		char com[20];
 		int buff, round = 1;
+		int count = 1-JML_PEMAIN;
 
 		while (isPlaying) {
 			MAP(M, Tp);
+			LowerRoll = 1;
+			UpperRoll = MaxRoll;
 			isEndTurn = FALSE;
 			sSkill ss = SkillSet(s);
 			boolean isRolled = FALSE;
+			GenerateBuff(Ts, Turn(P));
+			if (count > 0) {
+				AddSkill(&ss, GenerateSkill(Turn(P)));
+			}
 
 			while (!isEndTurn) {
 				printf("\n[%s] >>> ", Name(P));
@@ -116,6 +119,7 @@ int main(int argc, char const *argv[])
 
 				if (strcmp(com, "SKILL") == 0) {
 					SKILL(&Tp, &ss, Turn(P));
+					SkillSet(s) = ss;
 				} else if (strcmp(com, "MAP") == 0) {
 					MAP(M, Tp);
 				} else if (strcmp(com, "BUFF") == 0) {
@@ -126,14 +130,22 @@ int main(int argc, char const *argv[])
 					if (!isRolled) {
 						ROLL(M, Turn(P), Position(P), LowerRoll, UpperRoll, &Tp);
 						isRolled = TRUE;
+						if (Position(P) == NEff(M)) {
+							isPlaying = FALSE;
+						}
 					}
 				} else if (strcmp(com, "ENDTURN") == 0) {
-					ENDTURN(&S, round, Tp, &P);
-					isEndTurn = TRUE;
-					if (s == Last(Ts)) {
-						s = First(Ts);
+					if (isRolled) {
+						ENDTURN(&S, round, Tp, &P);
+						isEndTurn = TRUE;
+						count++;
+						if (s == Last(Ts)) {
+							s = First(Ts);
+						} else {
+							s = Next(s);
+						}
 					} else {
-						s = Next(s);
+						printf("Silakan ROLL terlebih dahulu.\n");
 					}
 				} else if (strcmp(com, "UNDO") == 0) {
 					UNDO(&S, &Tp);
@@ -143,8 +155,8 @@ int main(int argc, char const *argv[])
 
 			}
 
-			/* Next round: if Turn(P) = JML_PEMAIN */
 			/* End of Game: if Position(P) = NEff(M) */
+			/* Bug => Teleporter + Buff + UNDO */
 			
 		}
 

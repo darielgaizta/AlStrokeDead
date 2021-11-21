@@ -96,6 +96,8 @@ void GenerateBuff(TabSkill L, int t)
 		BUFF_AKTIF = "# Senter Pengecil Hoki #";
 	} else if ((sval == 3) && FindSkill(ss, "Senter Pembesar Hoki")) {
 		BUFF_AKTIF = "# Senter Pembesar Hoki #";
+	} else {
+		BUFF_AKTIF = "Tidak ada.";
 	}
 }
 
