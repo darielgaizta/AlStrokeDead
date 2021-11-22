@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "mesinkata.h"
-#include "../boolean.h"
+#include "../../boolean.h"
 #include "../mesinkar/mesinkar.h"
 
 

@@ -3,7 +3,7 @@
 #ifndef __COMMAND_H__
 #define __COMMAND_H__
 
-#include "../boolean.h"
+#include "../../boolean.h"
 #include "../skill/skill.h"
 #include "../player/player.h"
 #include "../state/state.h"
@@ -33,7 +33,7 @@ void ROLL(Map M, int t, int p, int lower, int upper, TabPlayer *T, boolean *bMov
 /* Generate random integer dari 1--MaxRoll */
 /* Pemain berpindah dengan fungsi Move() */
 
-void ENDTURN(State *S, int X, TabPlayer Tp, Player *P, TabSkill Ts);
+void ENDTURN(State *S, int X, TabPlayer Tp, Player *P, TabSkill Ts, Skill *s);
 /* Mengakhiri turn pemain, turn berpindah ke NextPlayer */
 /* Jika LastPlayer sudah ENDTURN, state game disimpan (Push) */
 

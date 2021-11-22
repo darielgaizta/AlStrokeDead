@@ -3,7 +3,7 @@
 #ifndef _MAP_H
 #define _MAP_H
 
-#include "../boolean.h"
+#include "../../boolean.h"
 #include "../mesinkar/mesinkar.h"
 #include "../mesinkata/mesinkata.h"
 

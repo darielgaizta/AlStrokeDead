@@ -3,7 +3,7 @@
 #ifndef __PLAYER_H__
 #define __PLAYER_H__
 
-#include "../boolean.h"
+#include "../../boolean.h"
 #include "../skill/skill.h"
 
 extern int JML_PEMAIN;		// Jumlah pemain yang bermain

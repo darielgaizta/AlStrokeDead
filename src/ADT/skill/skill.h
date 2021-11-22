@@ -4,7 +4,7 @@
 #ifndef __SKILL_H__
 #define __SKILL_H__
 
-#include "../boolean.h"
+#include "../../boolean.h"
 
 typedef int Skillnb;
 typedef struct { 

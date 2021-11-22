@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "mesinkar.h"
-#include "../boolean.h"
+#include "../../boolean.h"
 
 
 char CC;

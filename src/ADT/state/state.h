@@ -3,7 +3,7 @@
 #ifndef _STATE_H
 #define _STATE_H
 
-#include "../boolean.h"
+#include "../../boolean.h"
 #include "../skill/skill.h"
 #include "../player/player.h"
 

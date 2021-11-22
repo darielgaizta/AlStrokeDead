@@ -18,13 +18,13 @@
 #include <time.h>
 #include <string.h>
 #include <math.h>
-#include "mesinkar/mesinkar.c"
-#include "mesinkata/mesinkata.c"
-#include "command/command.c"
-#include "player/player.c"
-#include "state/state.c"
-#include "skill/skill.c"
-#include "map/map.c"
+#include "ADT/mesinkar/mesinkar.c"
+#include "ADT/mesinkata/mesinkata.c"
+#include "ADT/command/command.c"
+#include "ADT/player/player.c"
+#include "ADT/state/state.c"
+#include "ADT/skill/skill.c"
+#include "ADT/map/map.c"
 
 int main(int argc, char const *argv[])
 {
@@ -168,14 +168,9 @@ int main(int argc, char const *argv[])
 				} else if (strcmp(com, "ENDTURN") == 0) {
 					if (isPlaying) {
 						if (isRolled) {
-							ENDTURN(&S, round, Tp, &P, Ts);
+							ENDTURN(&S, round, Tp, &P, Ts, &s);
 							isEndTurn = TRUE;
 							count++;
-							if (s == Last(Ts)) {
-								s = First(Ts);
-							} else {
-								s = Next(s);
-							}
 						} else {
 							printf("Silakan ROLL terlebih dahulu.\n");
 						}

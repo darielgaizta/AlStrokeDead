@@ -7,7 +7,7 @@
 int MaxRoll;
 
 void LoadMap(Map *M, ArrayOfTeleporter *AoT)
-/* Membaca bentuk peta tiap petak dari konfigurasi.txt */
+/* Membaca bentuk peta tiap petak dari config.txt */
 /* NEff(M)= <CKata pertama yang diakuisi> dalam int */
 {
 	int i, counter, val;
@@ -15,7 +15,7 @@ void LoadMap(Map *M, ArrayOfTeleporter *AoT)
 	i = 0;
 	counter = 0;
 	char MapLength[3];
-	START("konfigurasi.txt");
+	START("../data/config.txt");
 	IgnoreBlank();
 	while (CC != BLANK && CC !='\n') {
 		MapLength[i] = CC;
@@ -91,7 +91,7 @@ void LoadMap(Map *M, ArrayOfTeleporter *AoT)
 }
 
 void Config()
-/* Menuliskan konfigurasi.txt berdasarkan format yang disediakan */
+/* Menuliskan config.txt berdasarkan format yang disediakan */
 {
 	printf("Set The Game's Configuration!\n");
 	printf("(check our documentation for configuration format)\n");
@@ -100,7 +100,7 @@ void Config()
 	char c[100];
 	int i;
 
-	F = fopen("konfigurasi.txt", "w");
+	F = fopen("../data/config.txt", "w");
 	
 	for (i = 0; i < 4; i++) {
 		fgets(c, sizeof(c), stdin);

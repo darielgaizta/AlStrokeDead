@@ -160,15 +160,17 @@ void ROLL(Map M, int t, int p, int lower, int upper, TabPlayer *T, boolean *bMov
 
 }
 
-void ENDTURN(State *S, int X, TabPlayer Tp, Player *P, TabSkill Ts)
+void ENDTURN(State *S, int X, TabPlayer Tp, Player *P, TabSkill Ts, Skill *s)
 /* Mengakhiri turn pemain, turn berpindah ke NextPlayer */
 /* Jika LastPlayer sudah ENDTURN, state game disimpan (Push) */
 {
     if (LastPlayer(Tp) == *P) {
         Push(S, X, Tp, Ts);
         *P = FirstPlayer(Tp);
+        *s = First(Ts);
     } else {
         *P = NextPlayer(*P);
+        *s = Next(*s);
     }
 }
 
