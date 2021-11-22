@@ -164,6 +164,10 @@ int main(int argc, char const *argv[])
 							isPlaying = FALSE;
 						}
 					}
+					else
+					{
+						printf("Anda sudah melakukan ROLL pada turn ini!");
+					}
 
 				} else if (strcmp(com, "ENDTURN") == 0) {
 					if (isPlaying) {
