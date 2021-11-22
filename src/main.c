@@ -211,8 +211,5 @@ int main(int argc, char const *argv[])
 	printf("(see the NIM at the documentation)\n");
 	printf("\nCiao!\n");
 
-	int xxx;
-	scanf("%d", &xxx);
-
 	return 0;
 }
