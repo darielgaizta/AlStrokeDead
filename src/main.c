@@ -38,7 +38,28 @@ int main(int argc, char const *argv[])
 	int in;
 
 	/* Main Menu */
-	printf("==============|  WELCOME TO MOBITANGGA LEGENDS: DOR DOR  |====================\n");
+	printf("                         ___                                                ___            \n");            
+    printf("                        (   )                                              (   )           \n");          
+    printf(" ___  ___  ___   .--.    | |    .--.      .--.    ___ .-. .-.     .--.      | |_       .--.\n");     
+    printf("(   )(   )(   ) /    \\   | |   /    \\    /    \\  (   )   '   \\   /    \\    (   __)    /    \\ \n");    
+    printf(" | |  | |  | | |  .-. ;  | |  |  .-. ;  |  .-. ;  |  .-.  .-. ; |  .-. ;    | |      |  .-. |\n");   
+    printf(" | |  | |  | | |  | | |  | |  |  |(___) | |  | |  | |  | |  | | |  | | |    | | ___  | |  | |\n");   
+    printf(" | |  | |  | | |  |/  |  | |  |  |      | |  | |  | |  | |  | | |  |/  |    | |(   ) | |  | |\n");   
+    printf(" | |  | |  | | |  ' _.'  | |  |  | ___  | |  | |  | |  | |  | | |  ' _.'    | | | |  | |  | |\n");    
+    printf(" | |  ; '  | | |  .'.-.  | |  |  '(   ) | '  | |  | |  | |  | | |  .'.-.    | ' | |  | '  | |\n");    
+    printf(" ' `-'   `-' ' '  `-' /  | |  '  `-' |  '  `-' /  | |  | |  | | '  `-' /    ' `-' ;  '  `-' /\n");    
+    printf("  '.__.'.__.'   `.__.'  (___)  `.__,'    `.__.'  (___)(___)(___) `.__.'      `.__.    `.__.'  \n"); 
+
+
+    printf("___  ___      _     _ _                                  _                               _        ______            ______           _ \n");
+    printf("|  \\/  |     | |   (_) |                                | |                             | |    _  |  _  \\           |  _  \\         | |\n");
+    printf("| .  . | ___ | |__  _| |_ __ _ _ __   __ _  __ _  __ _  | |     ___  __ _  ___ _ __   __| |___(_) | | | |___  _ __  | | | |___  _ __| |\n");
+    printf("| |\\/| |/ _ \\| '_ \\| | __/ _` | '_ \\ / _` |/ _` |/ _` | | |    / _ \\/ _` |/ _ \\ '_ \\ / _` / __|   | | | / _ \\| '__| | | | / _ \\| '__| |\n");
+    printf("| |  | | (_) | |_) | | || (_| | | | | (_| | (_| | (_| | | |___|  __/ (_| |  __/ | | | (_| \\__ \\_  | |/ / (_) | |    | |/ / (_) | |  |_|\n");
+    printf("\\_|  |_/\\___/|_.__/|_|\\__\\__,_|_| |_|\\__, |\\__, |\\__,_| \\_____/\\___|\\__, |\\___|_| |_|\\__,_|___(_) |___/ \\___/|_|    |___/ \\___/|_|  (_)\n");
+    printf("                                      __/ | __/ |                    __/ |                                                             \n");
+    printf("                                     |___/ |___/                    |___/                                                              \n");   
+
 	printf("About: This game is intentionally made for IF2111 Algorithm and Data Structure project, by Kelompok 1\n");
 	printf("Mobitangga Legends: Dor Dor is an 'ala-ala' of Snake&Ladder game. It can be played for 4 players. ");
 	printf("Each player will start from Petak 1 and finish at the final Petak. While in the game, players can use their skill, buff, and move to another Petak using Teleporter. ");
@@ -166,7 +187,7 @@ int main(int argc, char const *argv[])
 					}
 					else
 					{
-						printf("Anda sudah melakukan ROLL pada turn ini!");
+						printf("Anda sudah melakukan ROLL pada turn ini!\n");
 					}
 
 				} else if (strcmp(com, "ENDTURN") == 0) {
