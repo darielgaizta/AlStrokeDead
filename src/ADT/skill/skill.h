@@ -6,6 +6,8 @@
 
 #include "../../boolean.h"
 
+extern char * BUFF_AKTIF;
+
 typedef int Skillnb;
 typedef struct { 
     char * Nama;
@@ -83,6 +85,10 @@ void ShowSkill(sSkill S);
 
 char * GenerateSkill(Skillnb X);
 /* Menghasilkan nama skill yang di-randomized */
+
+void GenerateBuff(TabSkill L, Skillnb X);
+/* Menghasilkan BUFF_AKTIF dari skill yang DIMILIKI pemain */
+/* Skill yang DIMILIKI pemain dapat diakses dengan SkillSet(S) */
 
 /****************** PRIMITIF BERDASARKAN NILAI ******************/
 /*** PENAMBAHAN ELEMEN ***/

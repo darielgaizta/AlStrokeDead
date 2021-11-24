@@ -2,13 +2,12 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 #include "player.h"
 
-int JML_PEMAIN = 0;						// Jumlah pemain yang bermain
-char * BUFF_AKTIF = "Tidak ada" ;		// Buff yang didapatkan pemain
+int JML_PEMAIN = 0;
 
 /* =======================|  Inisiasi Game   |=================================== */
+
 boolean IsEmptyPlayer (TabPlayer T)
 /* Mengirim true jika list kosong. Lihat definisi di atas. */
 {
@@ -24,18 +23,17 @@ void CreateEmptyPlayer (TabPlayer *T)
 }
 
 /* =======================| Manajemen Memori  |================================== */
-Player AlokasiPlayer (char* n, int t, int p, TabSkill s)
+
+Player AlokasiPlayer (int X, char * nama)
 /* Mengirimkan Player hasil alokasi sebuah elemen */
 /* Jika alokasi berhasil, maka Player tidak nil. */
 /* Jika alokasi gagal, mengirimkan Nil. */
 {
-	Player P = (sPlayer*) malloc(sizeof(sPlayer));
+	Player P = (GetPlayer*) malloc (sizeof(GetPlayer));
 	if (P != Nil) {
-		Name(P) = n;
-		Turn(P) = t;
-		Position(P) = p;
-		Skill(P) = s;
+		Turn(P) = X;
 		NextPlayer(P) = Nil;
+		DataPlayer(P) = AddData(nama);
 		return P;
 	} else {
 		return Nil;
@@ -51,6 +49,7 @@ void DealokasiPlayer (Player P)
 }
 
 /* =======================|    Akses Player    |================================== */
+
 Player SearchPlayer (TabPlayer T, int X)
 /* Mencari apakah ada elemen list dengan Info(P)=X */
 /* Jika ada, mengirimkan Player elemen tersebut. */
@@ -67,48 +66,39 @@ Player SearchPlayer (TabPlayer T, int X)
 	}
 }
 
-void Move (TabPlayer *T, int t, int p)
-/* Mengubah Position(P) dengan Turn(P)=t menjadi p */
+Player SearchPosition (TabPlayer T, int X)
+/* Mencari apakah ada elemen list dengan Position(P)=X */
+/* Jika ada, mengirimkan Player elemen tersebut. */
+/* Jika tidak ada, mengirimkan Nil */
 {
-	printf("Player %d berpindah ke Petak %d\n", t, p);
-	Player P = SearchPlayer(*T, t);
-	Position(P) = p;
-}
-
-void GenerateBuff(TabSkill L, int t)
-/* Menghasilkan BUFF_AKTIF dari skill yang DIMILIKI pemain */
-/* Skill yang DIMILIKI pemain dapat diakses dengan SkillSet(S) */
-{
-	Skill S = First(L);
-	while (Info(S) != t) {
-		S = Next(S);
-	}
-
-	srand(time(0));
-	int rint = rand();
-	sSkill ss = SkillSet(S);
-	int sval = (rint % 10) % 4;
-	if ((sval == 0) && FindSkill(ss, "Cermin Pengganda")) {
-		BUFF_AKTIF = "# Cermin Pengganda #";
-	} else if ((sval == 1) && FindSkill(ss, "Pintu Ga Ke Mana Mana")) {
-		BUFF_AKTIF = "# Imunitas Teleport #";
-	} else if ((sval == 2) && FindSkill(ss, "Senter Pengecil Hoki")) {
-		BUFF_AKTIF = "# Senter Pengecil Hoki #";
-	} else if ((sval == 3) && FindSkill(ss, "Senter Pembesar Hoki")) {
-		BUFF_AKTIF = "# Senter Pembesar Hoki #";
+	if (IsEmptyPlayer(T)) {
+		return Nil;
 	} else {
-		BUFF_AKTIF = "Tidak ada.";
+		Player P = FirstPlayer(T);
+		while ((Position(DataPlayer(P))) != X && (P != Nil)) {
+			P = NextPlayer(P);
+		}
+		return P;
 	}
 }
 
-/* =======================|   Insert Element   |================================== */
-void AddPlayer (TabPlayer *T, char* n, int t, int p, TabSkill s)
+sPlayer AddData (char * nama)
+/* Mengembalikan data player dengan Name(P) = nama
+   dan Position(P) = p */
+{
+	sPlayer sp;
+	Name(sp) = nama;
+	Position(sp) = 1;
+	return sp;
+}
+
+void AddPlayer (TabPlayer *T, int X, char * nama)
 /* I.S. T mungkin kosong */
 /* F.S. Melakukan alokasi sebuah elemen dan */
 /* menambahkan elemen list di akhir: elemen terakhir yang baru */
 /* bernilai X jika alokasi berhasil. Jika alokasi gagal: I.S.= F.S. */
 {
-	Player P = AlokasiPlayer(n, t, p, s);
+	Player P = AlokasiPlayer(X, nama);
 	if (P != Nil) {
 		InsertLastPlayer(T, P);
 		printf("Player successfully added.\n");
@@ -117,6 +107,16 @@ void AddPlayer (TabPlayer *T, char* n, int t, int p, TabSkill s)
 		printf("Failed to add player.\n");
 	}
 }
+
+void Move (Player *P, int t, int p)
+/* Mengubah Position(P) dengan Turn(P)=t menjadi p */
+{
+	printf("Player %d berpindah ke Petak %d\n", t, p);
+	
+	Position(DataPlayer(*P)) = p;
+}
+
+/* =======================|   Insert Element   |================================== */
 
 void InsertFirstPlayer (TabPlayer *T, Player P)
 /* I.S. Sembarang, P sudah dialokasi  */
@@ -194,6 +194,7 @@ void RemovePlayer (TabPlayer *T, int X)
 		}
 		DealokasiPlayer(P);
 		JML_PEMAIN--;
+		printf("Player successfully removed.\n");
 	}
 }
 
@@ -211,10 +212,10 @@ void ShowPlayer (TabPlayer T)
     printf("\nDaftar pemain\t: ");
     printf("[");
     if (!IsEmptyPlayer(T)) {
-        printf("%s", Name(P));
+        printf("%s", Name(DataPlayer(P)));
         P = NextPlayer(P);
         while (P != Nil) {
-            printf(", %s", Name(P));
+            printf(", %s", Name(DataPlayer(P)));
             P = NextPlayer(P);
         }
     }

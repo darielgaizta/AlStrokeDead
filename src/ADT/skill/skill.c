@@ -5,6 +5,8 @@
 #include <math.h>
 #include <time.h>
 
+char * BUFF_AKTIF = "Tidak ada.";
+
 /* =======================|   Opening Game   |=================================== */
 boolean IsEmpty (TabSkill L){
     return (First(L) == Nil && Last(L) == Nil) ;
@@ -139,6 +141,32 @@ char * GenerateSkill(Skillnb X)
     }
     printf("Congratulations Player %d! You get: %s (Skill ID: %d)\n", X, n, rint);
     return n;
+}
+
+void GenerateBuff(TabSkill L, Skillnb X)
+/* Menghasilkan BUFF_AKTIF dari skill yang DIMILIKI pemain */
+/* Skill yang DIMILIKI pemain dapat diakses dengan SkillSet(S) */
+{
+    Skill S = First(L);
+    while (Info(S) != X) {
+        S = Next(S);
+    }
+
+    srand(time(0));
+    int rint = rand();
+    sSkill ss = SkillSet(S);
+    int sval = (rint % 10) % 4;
+    if ((sval == 0) && FindSkill(ss, "Cermin Pengganda")) {
+        BUFF_AKTIF = "# Cermin Pengganda #";
+    } else if ((sval == 1) && FindSkill(ss, "Pintu Ga Ke Mana Mana")) {
+        BUFF_AKTIF = "# Imunitas Teleport #";
+    } else if ((sval == 2) && FindSkill(ss, "Senter Pengecil Hoki")) {
+        BUFF_AKTIF = "# Senter Pengecil Hoki #";
+    } else if ((sval == 3) && FindSkill(ss, "Senter Pembesar Hoki")) {
+        BUFF_AKTIF = "# Senter Pembesar Hoki #";
+    } else {
+        BUFF_AKTIF = "Tidak ada.";
+    }
 }
 
 /****************** PRIMITIF BERDASARKAN NILAI ******************/

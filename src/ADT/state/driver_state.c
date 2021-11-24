@@ -4,78 +4,117 @@
 #include "../skill/skill.c"
 #include "../player/player.c"
 
+
 int main(int argc, char const *argv[])
 {
+	TabPlayer Tp;
+	CreateEmptyPlayer(&Tp);
+
+	TabSkill Ts;
 	State S;
+
+	CreateEmpty(&Ts);
 	CreateEmptyState(&S);
 
-	TabPlayer T;
-	CreateEmptyPlayer(&T);
-
 	int in;
-	printf("([0] Exit [1] Play!) => ");
+
+	AddPlayer(&Tp, (1), "Mobita");
+	AddPlayer(&Tp, (2), "Suzuka");
+	AddPlayer(&Tp, (3), "Borakemon");
+
+	ShowPlayer(Tp);
+
+	RemovePlayer(&Tp, 2);
+	
+	ShowPlayer(Tp);	
+
+	InsVLast(&Ts, 1);
+	InsVLast(&Ts, 2);
+
+	Player P = FirstPlayer(Tp);
+	sPlayer sp = DataPlayer(P);
+
+	printf("Posisi sebelum pindah: %d\n", Position(sp));
+
+	Push(&S, Tp, Ts);
+
+	Move(&P, 1, 5);
+
+	printf("Posisi setelah pindah #1: %d\n", Position(sp));
+	printf("Posisi setelah pindah #2: %d\n", Position(DataPlayer(P)));
+
+	printf("\n##### PROSES POP #####\n");
+	Pop(&S, &Tp, &Ts);
+
+	printf("=====| Print #1 |=====\n");
+	printf("Posisi setelah pop #1: %d\n", Position(sp));
+	printf("Posisi setelah pop #2: %d\n", Position(DataPlayer(P)));
+
+	sp = DataPlayer(P); // Update.
+
+	printf("=====| Print #2 |=====\n");
+	printf("Posisi setelah pop #1: %d\n", Position(sp));
+	printf("Posisi setelah pop #2: %d\n", Position(DataPlayer(P)));
+
+	P = FirstPlayer(Tp);	// Redefine.
+	sp = DataPlayer(P);		// Redefine.
+
+	printf("=====| Print #2 |=====\n");
+	printf("Posisi setelah pop #1: %d\n", Position(sp));
+	printf("Posisi setelah pop #2: %d\n", Position(DataPlayer(P)));
+
+	printf("\n[PRESS ENTER]\n");
 	scanf("%d", &in);
-
-	if (in) {
-		int i, j;
-		printf("\n=======================|  Pick Your Hero!  |===================================\n");
-		printf("[1] Mobita-kun [2] Emon-san [3] Jayen-sama [4] Suzuka-chan [5] Shizuneo-senpai\n");
-		for (i = 0; i < 5; i++) {
-			printf("Masukkan nama pemain ke-%d: ", (i+1));
-			scanf("%d", &j);
-			if (j == 1) {
-				TabSkill S1;
-				CreateEmpty(&S1);
-				InsVFirst(&S1,1);
-				InsVFirst(&S1,2);
-				AddPlayer(&T, "Mobita-kun", (i+1), 1, S1);
-			} else if (j == 2) {
-				TabSkill S2;
-				CreateEmpty(&S2);
-				InsVFirst(&S2,1);
-				InsVFirst(&S2,2);
-				AddPlayer(&T, "Emon-san", (i+1), 1, S2);
-			} else if (j == 3) {
-				TabSkill S3;
-				CreateEmpty(&S3);
-				InsVFirst(&S3,1);
-				InsVFirst(&S3,2);
-				AddPlayer(&T, "Jayen-sama", (i+1), 1, S3);
-			} else if (j == 4) {
-				TabSkill S4;
-				CreateEmpty(&S4);
-				InsVFirst(&S4,1);
-				InsVFirst(&S4,2);
-				AddPlayer(&T, "Suzuka-chan", (i+1), 1, S4);
-			} else if (j == 5) {
-				TabSkill S5;
-				CreateEmpty(&S5);
-				InsVFirst(&S5,1);
-				InsVFirst(&S5,2);
-				AddPlayer(&T, "Shizuneo-senpai", (i+1), 1, S5);
-			}
-		}
-	}
-
-	ShowPlayer(T);
-
-	while (in) {
-		printf("([0] Keluar [1] Save [2] Load) => ");
-		scanf("%d", &in);
-		if (in == 1) {
-			Push(&S, 1, T);
-		} else if (in == 2) {
-			ElmtStack E;
-			Pop(&S, &E);
-			ShowPlayer(Player(E));
-		} else {
-			break;
-		}
-	}
-
-	int z;
-	printf("\n[Input any key to continue]");
-	scanf("%d", &z);
 
 	return 0;
 }
+/*
+int main(int argc, char const *argv[])
+{
+	TabPlayer Tp;
+	CreateEmptyPlayer(&Tp);
+
+	TabSkill Ts;
+	State S;
+	CreateEmpty(&Ts);
+	CreateEmptyState(&S);
+
+	int in;
+
+	InsVLast(&Ts, 1);
+
+	Skill s = First(Ts);
+	sSkill ss = SkillSet(s);
+
+	printf("$$$$$ SAAT DIPUSH $$$$$\n");	
+	ShowSkill(SkillSet(s));
+	ShowSkill(ss);
+
+	Push(&S, Tp, Ts);
+
+	AddSkill(&ss, "Nyampah");
+	AddSkill(&ss, "Tidur");
+
+	ShowSkill(SkillSet(s));
+	ShowSkill(ss);
+
+	Pop(&S, &Tp, &Ts);
+
+	printf("$$$$$ SETELAH POP #1 $$$$$\n");
+	ShowSkill(SkillSet(s));
+	ShowSkill(ss);
+
+	printf("$$$$$ SETELAH POP #2 $$$$$\n");
+	s = First(Ts);
+	ss = SkillSet(s);
+
+	ShowSkill(SkillSet(s));
+	ShowSkill(ss);
+
+
+	printf("\n[PRESS ENTER]\n");
+	scanf("%d", &in);
+
+	return 0;
+}
+*/

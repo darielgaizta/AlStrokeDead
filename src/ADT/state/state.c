@@ -1,73 +1,44 @@
 /* File: state.c */
 
 #include <stdio.h>
-#include <stdlib.h>
 #include "state.h"
 
-/* =======================| Manajemen Memori  |================================== */
-void AlokasiState (address *addr, int X, TabPlayer P, TabSkill S)
-/* I.S. Sembarang */
-/* F.S. Alamat P dialokasi, jika berhasil maka StateID(S)=X, 
-        dan StatePlayer(S)=P  */
-/*      P=Nil jika alokasi gagal */
+void CreateEmptyState (State *S)
+/* Membuat State kosong berkapasitas 100 */
 {
-	*addr = (ElmtState*) malloc(sizeof(ElmtState));
-	if(*addr != Nil){
-		StateID(*addr) = X;
-		StatePlayer(*addr) = P;
-		StateSkill(*addr) = S;
-		NextState(*addr) = Nil;
-	}
+	Top(*S) = 0;
 }
-
-void DealokasiState (address P)
-/* I.S. P adalah hasil alokasi, P != Nil */
-/* F.S. Alamat P didealokasi, dikembalikan ke sistem */
-{
-	free(P);
-}
-
-/* =======================| Prototype Stacks  |================================== */
 
 boolean IsEmptyState (State S)
-/* Mengirim true jika State kosong: TOP(S) = Nil */
+/* Mengirim true jika Stack kosong: lihat definisi di atas */
 {
-	return (Top(S) == Nil);
+	return Top(S) == 0;
 }
 
-void CreateEmptyState (State * S)
-/* I.S. sembarang */ 
-/* F.S. Membuat sebuah stack S yang kosong */
+boolean IsFullState (State S)
+/* Mengirim true jika tabel penampung nilai elemen stack penuh */
 {
-	Top(*S) = Nil;
+	return Top(S) == 100;
 }
 
-void Push (State * S, int X, TabPlayer P, TabSkill s)
-/* Menambahkan X sebagai elemen State S */
-/* I.S. S mungkin kosong, X terdefinisi */
-/* F.S. X menjadi TOP yang baru jika alokasi X berhasil, */
-/*      jika tidak, S tetap */
-/* Pada dasarnya adalah operasi Insert First pada list linier */
+/* ************ Menambahkan sebuah elemen ke State ************ */
+void Push (State * S, TabPlayer Tp, TabSkill Ts)
+/* Menambahkan X sebagai elemen State S. */
+/* I.S. S mungkin kosong, tabel penampung elemen stack TIDAK penuh */
+/* F.S. X menjadi TOP yang baru,TOP bertambah 1 */
 {
-	address addrState;
-	AlokasiState(&addrState, X, P, s);
-	if (addrState != Nil) {
-		NextState(addrState) = Top(*S);
-		Top(*S) = addrState;
-	}
+	Top(*S)++;
+	StatePlayer(*S) = Tp;
+	StateSkill(*S) = Ts;
 }
 
-void Pop (State * S, ElmtStack *E)
+/* ************ Menghapus sebuah elemen State ************ */
+void Pop (State * S, TabPlayer* Tp, TabSkill* Ts)
 /* Menghapus X dari State S. */
-/* I.S. S tidak mungkin kosong */
-/* F.S. X adalah nilai elemen TOP yang lama, */
-/*      elemen TOP yang lama didealokasi */
-/* Pada dasarnya adalah operasi Delete First pada list linier */
+/* I.S. S  tidak mungkin kosong */
+/* F.S. X adalah nilai elemen TOP yang lama, TOP berkurang 1 */
 {
-	address P;
-	*E = InfoState(Top(*S));
-	P = Top(*S);
-	Top(*S) = NextState(Top(*S));
-	NextState(P) = Nil;
-	DealokasiState(P);
+	*Tp = StatePlayer(*S);
+	*Ts = StateSkill(*S);
+	Top(*S)--;
 }

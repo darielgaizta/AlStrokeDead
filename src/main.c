@@ -26,18 +26,15 @@
 #include "ADT/skill/skill.c"
 #include "ADT/map/map.c"
 
+int min;
+int max;
+
 int main(int argc, char const *argv[])
 {
-	/* Variables */
-	TabPlayer Tp;
-	TabSkill Ts;
-	State S;
-	Map M;
-	ArrayOfTeleporter AoT;
-
 	int in;
 
-	/* Main Menu */
+	/* ========================================| Main Menu |======================================== */
+
 	printf("                         ___                                                ___            \n");            
     printf("                        (   )                                              (   )           \n");          
     printf(" ___  ___  ___   .--.    | |    .--.      .--.    ___ .-. .-.     .--.      | |_       .--.\n");     
@@ -68,173 +65,156 @@ int main(int argc, char const *argv[])
 	printf("\n([0] Exit [1] New Game) >>> ");
 	scanf("%d", &in);
 
-	if (!in){
-		exit(0);
-	} else {
-		/* Configuration */
-		Config();
+	if (in)
+	{
+		/* ========================================| Init Game |======================================== */
 
-		/* Set Variables */
-		CreateEmptyPlayer(&Tp);
-		CreateEmpty(&Ts);
-		CreateEmptyState(&S);
-		LoadMap(&M, &AoT);
+		TabPlayer Tp;			// List of players
+		TabSkill Ts;			// List of skills
+		State S;				// Stack of states
+		Map M;					// Map Representation
+		ArrayOfTeleporter AoT;	// Teleporter Representation
 
-		/* Set Players */
+		CreateEmptyPlayer(&Tp);	// Init. Tp
+		CreateEmpty(&Ts);		// Init. Ts
+		CreateEmptyState(&S);	// Init S
+		LoadMap(&M, &AoT);		// Init map
+
+		Config();				// Set config
+
+		/* ========================================|  Opening  |======================================== */
+
+		int i, j;
+
 		printf("\nNumber of Players (Max. 4 Players): ");
 		scanf("%d", &in);
 
-		int i, j;
-		printf("\n=======================|  Pick Your Hero!  |===================================\n");
+		printf("\n=======================|  Pick Your Hero!  |==================================\n");
 		printf("[1] Mobita-kun [2] Emon-san [3] Jayen-sama [4] Suzuka-chan [5] Shizuneo-senpai\n");
-		for (i = 0; i < in; i++) {
+
+		for (i = 0; i < in; i++)
+		{
 			printf("Masukkan nama pemain ke-%d: ", (i+1));
 			scanf("%d", &j);
-			if (j == 1) {
-				InsVLast(&Ts, (i + 1));
-				AddPlayer(&Tp, "Mobita-kun", (i+1), 1, Ts);
-			} else if (j == 2) {
-				InsVLast(&Ts, (i + 1));
-				AddPlayer(&Tp, "Emon-san", (i+1), 1, Ts);
-			} else if (j == 3) {
-				InsVLast(&Ts, (i + 1));
-				AddPlayer(&Tp, "Jayen-sama", (i+1), 1, Ts);
-			} else if (j == 4) {
-				InsVLast(&Ts, (i + 1));
-				AddPlayer(&Tp, "Suzuka-chan", (i+1), 1, Ts);
-			} else if (j == 5) {
-				InsVLast(&Ts, (i + 1));
-				AddPlayer(&Tp, "Shizuneo-senpai", (i+1), 1, Ts);
+
+			if (j == 1)
+			{
+				InsVLast(&Ts, (i+1));
+				AddPlayer(&Tp, (i+1), "Mobita-kun");
+			}
+			else if (j == 2)
+			{
+				InsVLast(&Ts, (i+1));
+				AddPlayer(&Tp, (i+1), "Emon-san");
+			}
+			else if (j == 3)
+			{
+				InsVLast(&Ts, (i+1));
+				AddPlayer(&Tp, (i+1), "Jayen-sama");
+			}
+			else if (j == 4)
+			{
+				InsVLast(&Ts, (i+1));
+				AddPlayer(&Tp, (i+1), "Suzuka-chan");
+			}
+			else if (j == 5)
+			{
+				InsVLast(&Ts, (i+1));
+				AddPlayer(&Tp, (i+1), "Shizuneo-senpai");
 			}
 		}
 
 		ShowPlayer(Tp);
 
-		/* Gameplay */
-		printf("\n=======================|    Game Start     |===================================\n");
-
-		Skill  s = First(Ts);
-		Player P = FirstPlayer(Tp);
-		boolean isMove = FALSE;
-		boolean isPlaying = TRUE;
-		boolean isEndTurn = FALSE;
+		/* ========================================| Game play |======================================== */
 
 		char com[20];
-		int buff = -1, round = 1;
-		int count = 1-JML_PEMAIN;
+		
+		Round = 1;
+		boolean isPlaying = TRUE;			// Apakah game masih berlanjut
+		Player P = FirstPlayer(Tp);			// Pemain
+		Skill  s = First(Ts);				// Skill pemain
 
-		while (isPlaying) {
+		sPlayer sp;							// Data pemain
+		sSkill  ss;							// Data skill pemain
 
+		while (isPlaying)
+		{
+			printf("\n========================================|  Round %d |========================================\n", Round);
+			
 			MAP(M, Tp);
-			LowerRoll = 1;
-			UpperRoll = MaxRoll;
-			isMove = FALSE;
+			minval = 1;
+			maxval = MaxRoll;
 			isEndTurn = FALSE;
-			sSkill ss = SkillSet(s);
-			boolean isRolled = FALSE;
-			GenerateBuff(Ts, Turn(P));
-			if (count > 0) {
+			isNotRoll = TRUE ;
+			sp = DataPlayer(P);
+			ss = SkillSet(s);
+
+			if (Round > 1)
+			{
 				AddSkill(&ss, GenerateSkill(Turn(P)));
 			}
 
-			while (!isEndTurn) {
-				printf("\n[%s] >>> ", Name(P));
-				scanf("%s", &com);
+			while (!isEndTurn)
+			{
+				printf("\n[%s] >>> ", Name(DataPlayer(P)));	// Show which player is playing
+				scanf("%s", &com);							// Input command
 
-				if (strcmp(com, "SKILL") == 0) {
-					SKILL(&Tp, &ss, Turn(P));
-					SkillSet(s) = ss;
-
-				} else if (strcmp(com, "MAP") == 0) {
-					MAP(M, Tp);
-
-				} else if (strcmp(com, "BUFF") == 0) {
-					buff = BUFF();
-
-				} else if (strcmp(com, "INSPECT") == 0) {
-					INSPECT(M, AoT);
-
-				} else if (strcmp(com, "ROLL") == 0) {
-					if (!isRolled) {
-						ROLL(M, Turn(P), Position(P), LowerRoll, UpperRoll, &Tp, &isMove);
-						isRolled = TRUE;
-
-						/* Teleporter Check */
-						if (isMove) {
-							for (i = 0; i < NEff(AoT); i++) {
-								if (TelIn(AoT, i) == Position(P)) {
-									printf("Petak %d memiliki teleporter menuju Petak %d\n", TelIn(AoT,i), TelOut(AoT,i));
-
-									/* Imunitas Teleport Check */
-									if (strcmp(BUFF_AKTIF, "# Imunitas Teleport #") == 0) {
-										printf("Anda memiliki buff # Imunitas Teleport #. Apakah Anda ingin teleport?\n");
-										printf("([0] Tidak [1] Ya!) => ");
-										scanf("%d", &in);
-										if (in) {
-											Move(&Tp, Turn(P), TelOut(AoT,i));
-											BUFF_AKTIF = "Tidak ada.";
-										}
-									} else {
-										Move(&Tp, Turn(P), TelOut(AoT,i));
-									}
-									break;
-								}
-							}
-						}
-						if (Position(P) == NEff(M)) {
-							isPlaying = FALSE;
-						}
-					}
-					else
-					{
-						printf("Anda sudah melakukan ROLL pada turn ini!\n");
-					}
-
-				} else if (strcmp(com, "ENDTURN") == 0) {
-					if (isPlaying) {
-						if (isRolled) {
-							ENDTURN(&S, round, Tp, &P, Ts, &s);
-							isEndTurn = TRUE;
-							count++;
-						} else {
-							printf("Silakan ROLL terlebih dahulu.\n");
-						}
-					} else {
-						isEndTurn = TRUE;
-					}
-
-				} else if (strcmp(com, "UNDO") == 0) {
-					UNDO(&S, &Tp, &Ts);
-					P = FirstPlayer(Tp);
-					s = First(Ts);
-					isEndTurn = TRUE;
-
-				} else {
-					printf("Input tidak valid.\n");
+				if (strcmp(com, "SKILL") == 0)
+				{
+					SKILL(&Tp, &Ts, &s, &sp, &ss, Turn(P));
 				}
-
+				else if (strcmp(com, "MAP") == 0)
+				{
+					MAP(M, Tp);
+				}
+				else if (strcmp(com, "BUFF") == 0)
+				{
+					BUFF();
+				}
+				else if (strcmp(com, "INSPECT") == 0)
+				{
+					INSPECT(M, AoT);
+				}
+				else if (strcmp(com, "ROLL") == 0)
+				{
+					ROLL(M, AoT, &P, &sp, Turn(P));
+					if (Position(DataPlayer(P)) == NEff(M))
+					{
+						isPlaying = FALSE;
+						isEndTurn = TRUE ;
+					}
+				}
+				else if (strcmp(com, "ENDTURN") == 0)
+				{
+					ENDTURN(&S, Ts, Tp, &P, &s);
+				}
+				else if (strcmp(com, "UNDO") == 0)
+				{
+					UNDO(&S, &Tp, &Ts, &P, &s);
+				}
 			}
 
-			/* End of Game: if Position(P) = NEff(M) */
-			/* Bug => UNDO */
-			
+			/* End Game: isPlaying == FALSE */
+
 		}
 
 		printf("\n##########################################################\n");
-		printf("CONGRATULATIONS, %s! You are among the legends!\n", Name(P));
+		printf("CONGRATULATIONS, %s! You are among the legends!\n", Name(DataPlayer(P)));
 		printf("##########################################################\n");
 		printf("\nFinal position:\n");
 		MAP(M, Tp);
-
 	}
 
 	/* End of Game */
 	printf("\n--- End of Game ---\n");
-	printf("Dear players, Thanks for playing Mobitangga Legends: Dor Dor. We would be pleased if you can send your feedback about this game to us. ");
+	printf("Dear players, Thanks for playing Mobitangga Legends: Dor Dor. We would be pleased if you can send your feedback about this game to us.\n");
 	printf("Let us know if you're happy while playing the game by sending us GoFood, GrabFood, etc. :D\n");
 	printf("Open for feedback: 182XXXXX@std.stei.itb.ac.id\n");
 	printf("(see the NIM at the documentation)\n");
 	printf("\nCiao!\n");
+
+	scanf("%d", &in);
 
 	return 0;
 }

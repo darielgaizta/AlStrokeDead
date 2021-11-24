@@ -1,46 +1,51 @@
 /* File: player.h */
+/* ADT Player mengimplementasikan ADT List Linier */
 
 #ifndef __PLAYER_H__
 #define __PLAYER_H__
 
 #include "../../boolean.h"
-#include "../skill/skill.h"
 
-extern int JML_PEMAIN;		// Jumlah pemain yang bermain
-extern char * BUFF_AKTIF;	// Buff yang didapatkan pemain
-
-typedef struct pTabPlayer * Player;
-typedef struct pTabPlayer {
-	char * name;			// Nama pemain
-	int turn;				// Urutan bermain
-	int position;			// Posisi pada petak
-	TabSkill skillp;		// Skill pemain
-	Player nextp;			// Player selanjutnya
-} sPlayer;
+extern int JML_PEMAIN;
 
 typedef struct {
-	Player firstp;
-	Player lastp;
-} TabPlayer;
+    char *  name; 
+    int position; 
+} sPlayer;
 
-#define Name(P) (P)->name
+typedef struct tTabPlayer * Player;
+typedef struct tTabPlayer { 
+	int turn;
+	sPlayer data;
+	Player nextp;
+} GetPlayer;
+typedef struct {
+	Player firstp;
+	Player  lastp;
+} TabPlayer; 
+
 #define Turn(P) (P)->turn
-#define Position(P) (P)->position
-#define Skill(P) (P)->skillp
+#define DataPlayer(P) (P)->data
 #define NextPlayer(P) (P)->nextp
 #define FirstPlayer(T) ((T).firstp)
 #define LastPlayer(T) ((T).lastp)
 
+/* Akses data pemain */
+#define Name(S) (S).name
+#define Position(S) (S).position
+
 /* =======================|   Opening Game   |=================================== */
+
 boolean IsEmptyPlayer (TabPlayer T);
 /* Mengirim true jika list kosong. Lihat definisi di atas. */
 
+/****************** PEMBUATAN LIST KOSONG ******************/
 void CreateEmptyPlayer (TabPlayer *T);
 /* I.S. T sembarang  */
 /* F.S. Terbentuk list kosong. Lihat definisi di atas. */
 
 /* =======================| Manajemen Memori  |================================== */
-Player AlokasiPlayer (char* n, int t, int p, TabSkill s);
+Player AlokasiPlayer (int X, char * nama);
 /* Mengirimkan Player hasil alokasi sebuah elemen */
 /* Jika alokasi berhasil, maka Player tidak nil. */
 /* Jika alokasi gagal, mengirimkan Nil. */
@@ -56,19 +61,23 @@ Player SearchPlayer (TabPlayer T, int X);
 /* Jika ada, mengirimkan Player elemen tersebut. */
 /* Jika tidak ada, mengirimkan Nil */
 
-void Move (TabPlayer *T, int t, int p);
-/* Mengubah Position(P) dengan Turn(P)=t menjadi p */
+Player SearchPosition (TabPlayer T, int X);
+/* Mencari player yang berada di posisi X di peta */
 
-void GenerateBuff(TabSkill L, int t);
-/* Menghasilkan BUFF_AKTIF dari skill yang DIMILIKI pemain */
-/* Skill yang DIMILIKI pemain dapat diakses dengan SkillSet(S) */
+sPlayer AddData (char * nama);
+/* Mengembalikan data player dengan Name(P) = nama
+   dan Position(P) = p */
 
-/* =======================|   Insert Element   |================================== */
-void AddPlayer (TabPlayer *T, char* n, int t, int p, TabSkill s);
+void AddPlayer (TabPlayer *T, int X, char * nama);
 /* I.S. T mungkin kosong */
 /* F.S. Melakukan alokasi sebuah elemen dan */
 /* menambahkan elemen list di akhir: elemen terakhir yang baru */
 /* bernilai X jika alokasi berhasil. Jika alokasi gagal: I.S.= F.S. */
+
+void Move (Player *P, int t, int p);
+/* Mengubah Position(P) dengan Turn(P)=t menjadi p */
+
+/* =======================|   Insert Element   |================================== */
 
 void InsertFirstPlayer (TabPlayer *T, Player P);
 /* I.S. Sembarang, P sudah dialokasi  */
