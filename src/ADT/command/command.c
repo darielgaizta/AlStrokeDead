@@ -197,7 +197,7 @@ void ROLL (Map M, ArrayOfTeleporter AoT, Player *P, sPlayer *sp, int X)
             int m;
             while (isNotRoll)
             {
-                printf("[Kemana Anda ingin berpindah?] >>> ");
+                printf("Kemana Anda ingin berpindah?\nPilih petak >>> ");
                 scanf("%d", &m);
                 if ((m == 1) && (forward))
                 {
