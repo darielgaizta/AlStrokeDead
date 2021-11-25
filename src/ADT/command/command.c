@@ -23,7 +23,7 @@ void SKILL (TabPlayer *Tp, TabSkill *Ts, Skill *s, sPlayer *sp, sSkill *ss, int 
 
     int in;
     printf("Apa yang ingin Anda lakukan?\n");
-    printf("([0] Keluar [X] Buang [-X] Gunakan) >>> ");
+    printf("([0] Keluar [X] Gunakan [-X] Buang) >>> ");
     scanf("%d", &in);
 
     if (!in)
