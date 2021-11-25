@@ -14,6 +14,7 @@ extern int minval;         // = 1;
 extern int maxval;         // = MaxRoll;
 extern boolean isEndTurn;  // Apakah player sudah ENDTURN
 extern boolean isNotRoll;  // Apakah player belum ROLL
+extern boolean immuneTel;  // Apakah sudah mengaktifkan # Imunitas Teleport #
 
 void SKILL (TabPlayer *Tp, TabSkill *Ts, Skill *s, sPlayer *sp, sSkill *ss, int X);
 /* Menampilkan skillyang DIMILIKI pemain dengan Turn(P) = X */
@@ -33,7 +34,7 @@ void ROLL (Map M, ArrayOfTeleporter AoT, Player *P, sPlayer *sp, int X);
 /* Pemain dapat memilih untuk mundur ataupun maju */
 /* Pemain tidak bisa berpindah ke petak terlarang (#) */
 
-void ENDTURN (State *S, TabSkill Ts, TabPlayer Tp, Player *P, Skill *s);
+void ENDTURN (State *S, TabSkill Ts, TabPlayer Tp, Player *P, Skill *s, sSkill *ss);
 /* Menandakan turn pemain telah berakhir dan berganti ke NextPlayer(P) */
 /* Apabila pemain terakhir ENDTURN, state ronde akan dipush ke stack S */
 

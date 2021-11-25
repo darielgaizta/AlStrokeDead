@@ -12,6 +12,7 @@ int minval;                     // = 1;
 int maxval;                     // = MaxRoll;
 boolean isEndTurn = FALSE;  // Apakah player sudah ENDTURN
 boolean isNotRoll = TRUE ;  // Apakah player belum ROLL
+boolean immuneTel = FALSE;  // Apakah sudah mengaktifkan # Imunitas Teleport #
 
 
 void SKILL (TabPlayer *Tp, TabSkill *Ts, Skill *s, sPlayer *sp, sSkill *ss, int X)
@@ -33,23 +34,33 @@ void SKILL (TabPlayer *Tp, TabSkill *Ts, Skill *s, sPlayer *sp, sSkill *ss, int 
     {
         DelSkill(ss, abs(in)); // DEBUG: Need update SkillSet
         printf("Anda telah membuang skill [%d].\n", abs(in));
-        SkillSet(*s) = *ss; // Update skill.
     }
     else if (in > 0)
     {
         if (strcmp(ElmtSkill(*ss, in-1), "Pintu Ga Ke Mana Mana") == 0)
         {
             BUFF_AKTIF = "# Imunitas Teleport #";
+            immuneTel  = TRUE;
+            DelSkill(ss, in);
         }
         else if (strcmp(ElmtSkill(*ss, in-1), "Cermin Pengganda") == 0)
         {
-            AddSkill(ss, GenerateSkill(X));
-            AddSkill(ss, GenerateSkill(X));
+            if (strcmp(BUFF_AKTIF, "# Cermin Pengganda #") != 0)
+            {
+                AddSkill(ss, GenerateSkill(X));
+                AddSkill(ss, GenerateSkill(X));
+                BUFF_AKTIF = "# Cermin Pengganda #";
+                DelSkill(ss, in);
+            }
+            else
+            {
+                printf("Anda tidak bisa menggunakan skill karena Anda memiliki buff %s.\n", BUFF_AKTIF);
+            }
         }
         else if (strcmp(ElmtSkill(*ss, in-1), "Mesin Penukar Posisi") == 0)
         {
             int Y, PP1, PP2;
-            printf("Input ID (Turn) pemain yang ingin ditukan posisinya dengan Anda! >>> ");
+            printf("Masukkan ID (Turn) pemain yang ingin ditukar posisinya dengan Anda!\nID Pemain >>> ");
             scanf("%d", &Y);
 
             Player P1 = SearchPlayer(*Tp, X);
@@ -59,26 +70,44 @@ void SKILL (TabPlayer *Tp, TabSkill *Ts, Skill *s, sPlayer *sp, sSkill *ss, int 
             Move(&P1, X, PP2);
             Move(&P2, Y, PP1);
             Position(*sp) = Position(DataPlayer(P1));
+            DelSkill(ss, in);
         }
         else if (strcmp(ElmtSkill(*ss, in-1), "Senter Pengecil Hoki") == 0)
         {
-            printf("Senter Pengecil Hoki diaktifkan.\n");
-            minval = 1;
-            maxval = MaxRoll/2;
+            if ((strcmp(BUFF_AKTIF, "# Senter Pengecil Hoki #") != 0) && (strcmp(BUFF_AKTIF, "# Senter Pembesar Hoki #") != 0))
+            {
+                printf("Senter Pengecil Hoki diaktifkan.\n");
+                minval = 1;
+                maxval = MaxRoll/2;
+                BUFF_AKTIF = "# Senter Pengecil Hoki #";
+                DelSkill(ss, in);
+            }
+            else
+            {
+                printf("Anda tidak bisa menggunakan skill karena Anda memiliki buff %s.\n", BUFF_AKTIF);
+            }
         }
         else if (strcmp(ElmtSkill(*ss, in-1), "Senter Pembesar Hoki") == 0)
         {
-            printf("Senter Pembesar Hoki diaktifkan.\n");
-            minval = MaxRoll/2;
-            maxval = MaxRoll;
+            if ((strcmp(BUFF_AKTIF, "# Senter Pengecil Hoki #") != 0) && (strcmp(BUFF_AKTIF, "# Senter Pembesar Hoki #") != 0))
+            {
+                printf("Senter Pembesar Hoki diaktifkan.\n");
+                minval = MaxRoll/2;
+                maxval = MaxRoll;
+                BUFF_AKTIF = "# Senter Pembesar Hoki #";
+                DelSkill(ss, in);
+            }
+            else
+            {
+                printf("Anda tidak bisa menggunakan skill karena Anda memiliki buff %s.\n", BUFF_AKTIF);
+            }
         }
-        DelSkill(ss, in);
-        SkillSet(*s) = *ss; // Update skill.
     }
     else
     {
         printf("Input tidak valid.\n");
     }
+    SkillSet(*s) = *ss; // Update skill (GLOBALLY).
 }
 
 void MAP (Map M, TabPlayer Tp)
@@ -137,6 +166,9 @@ void ROLL (Map M, ArrayOfTeleporter AoT, Player *P, sPlayer *sp, int X)
 {
     if (isNotRoll)
     {
+        boolean forward  = FALSE;
+        boolean backward = FALSE;
+
         srand(time(0));
         int val = (rand() % (maxval - minval + 1)) + minval;
         printf("Anda mendapatkan angka %d\n", val);
@@ -146,11 +178,13 @@ void ROLL (Map M, ArrayOfTeleporter AoT, Player *P, sPlayer *sp, int X)
         if ((d1 > 0) && (d1 < NEff(M)) && (Petak(M,d1-1) != '#'))
         {
             printf("[1] Petak %d\n", d1);
+            forward = TRUE;
             ds++;
         }
         if ((d2 > 0) && (d2 < NEff(M)) && (Petak(M,d2-1) != '#'))
         {
             printf("[2] Petak %d\n", d2);
+            backward = TRUE;
             ds++;
         }
         if (!ds)
@@ -165,13 +199,13 @@ void ROLL (Map M, ArrayOfTeleporter AoT, Player *P, sPlayer *sp, int X)
             {
                 printf("[Kemana Anda ingin berpindah?] >>> ");
                 scanf("%d", &m);
-                if (m == 1)
+                if ((m == 1) && (forward))
                 {
                     Move(P, X, d1);
                     isNotRoll = FALSE;
                     Position(*sp) = Position(DataPlayer(*P));
                 }
-                else if (m == 2)
+                else if ((m == 2) && (backward))
                 {
                     Move(P, X, d2);
                     isNotRoll = FALSE;
@@ -190,16 +224,17 @@ void ROLL (Map M, ArrayOfTeleporter AoT, Player *P, sPlayer *sp, int X)
                 if (TelIn(AoT,i) == Position(*sp))
                 {
                     printf("Petak %d memiliki teleporter menuju Petak %d\n", TelIn(AoT,i), TelOut(AoT,i));
-                    if (strcmp(BUFF_AKTIF, "# Imunitas Teleport #") == 0)
+                    if (immuneTel)
                     {
-                        printf("Anda memiliki buff %s. Apakah Anda ingin teleport?", BUFF_AKTIF);
+                        BUFF_AKTIF = "Tidak ada.";
+                        printf("Anda memiliki telah mengaktifkan # Imunitas Teleport #. Apakah Anda ingin teleport?\n");
                         printf("([0] Tidak [1] Ya!) => ");
                         scanf("%d", &in);
                         if (in)
                         {
                             Move(P, X, TelOut(AoT,i));
-                            BUFF_AKTIF = "Tidak ada.";
                         }
+                        immuneTel = FALSE;
                     }
                     else
                     {
@@ -216,12 +251,13 @@ void ROLL (Map M, ArrayOfTeleporter AoT, Player *P, sPlayer *sp, int X)
     }
 }
 
-void ENDTURN (State *S, TabSkill Ts, TabPlayer Tp, Player *P, Skill *s)
+void ENDTURN (State *S, TabSkill Ts, TabPlayer Tp, Player *P, Skill *s, sSkill *ss)
 /* Menandakan turn pemain telah berakhir dan berganti ke NextPlayer(P) */
 /* Apabila pemain terakhir ENDTURN, state ronde akan dipush ke stack S */
 {
     if (!isNotRoll){
         isEndTurn = TRUE;
+        SkillSet(*s) = *ss; // Update skill (GLOBALLY).
         if (LastPlayer(Tp) == *P)
         {
             Push(S, Tp, Ts);

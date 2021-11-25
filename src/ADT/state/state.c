@@ -27,9 +27,18 @@ void Push (State * S, TabPlayer Tp, TabSkill Ts)
 /* I.S. S mungkin kosong, tabel penampung elemen stack TIDAK penuh */
 /* F.S. X menjadi TOP yang baru,TOP bertambah 1 */
 {
+	int i = 0;
 	Top(*S)++;
-	StatePlayer(*S) = Tp;
-	StateSkill(*S) = Ts;
+	Player P = FirstPlayer(Tp);
+	Skill s = First(Ts);
+	while (P != Nil)
+	{
+		StatePlayer(*S,i) = DataPlayer(P);
+		StateSkill(*S,i) = SkillSet(s);
+		P = NextPlayer(P);
+		s = Next(s);
+		i++;
+	}
 }
 
 /* ************ Menghapus sebuah elemen State ************ */
@@ -38,7 +47,16 @@ void Pop (State * S, TabPlayer* Tp, TabSkill* Ts)
 /* I.S. S  tidak mungkin kosong */
 /* F.S. X adalah nilai elemen TOP yang lama, TOP berkurang 1 */
 {
-	*Tp = StatePlayer(*S);
-	*Ts = StateSkill(*S);
+	int i = 0;
+	Player P = FirstPlayer(*Tp);
+	Skill s = First(*Ts);
+	while (P != Nil)
+	{
+		DataPlayer(P) = StatePlayer(*S,i);
+		SkillSet(s) = StateSkill(*S,i);
+		P = NextPlayer(P);
+		s = Next(s);
+		i++;
+	}
 	Top(*S)--;
 }

@@ -9,14 +9,19 @@
 
 typedef struct
 {
-	TabPlayer Tp[100];
-	TabSkill Ts[100];
+	sPlayer sp[5];
+	sSkill ss[5];	
+} ElmtState;
+
+typedef struct
+{
+	ElmtState es[100];
 	int TOP;
 } State;
 
 #define Top(S) (S).TOP
-#define StatePlayer(S) (S).Tp[(S).TOP]
-#define StateSkill(S) (S).Ts[(S).TOP]
+#define StatePlayer(S,i) (((S).es[(S).TOP]).sp[(i)])
+#define StateSkill(S,i) (((S).es[(S).TOP]).ss[(i)])
 
 
 void CreateEmptyState (State *S);

@@ -69,18 +69,18 @@ int main(int argc, char const *argv[])
 	{
 		/* ========================================| Init Game |======================================== */
 
-		TabPlayer Tp;			// List of players
-		TabSkill Ts;			// List of skills
-		State S;				// Stack of states
-		Map M;					// Map Representation
+		TabPlayer Tp;				// List of players
+		TabSkill Ts;				// List of skills
+		State S;						// Stack of states
+		Map M;						// Map Representation
 		ArrayOfTeleporter AoT;	// Teleporter Representation
 
 		CreateEmptyPlayer(&Tp);	// Init. Tp
-		CreateEmpty(&Ts);		// Init. Ts
+		CreateEmpty(&Ts);			// Init. Ts
 		CreateEmptyState(&S);	// Init S
-		LoadMap(&M, &AoT);		// Init map
 
-		Config();				// Set config
+		Config();					// Set config
+		LoadMap(&M, &AoT);		// Init map
 
 		/* ========================================|  Opening  |======================================== */
 
@@ -147,8 +147,11 @@ int main(int argc, char const *argv[])
 			maxval = MaxRoll;
 			isEndTurn = FALSE;
 			isNotRoll = TRUE ;
+			immuneTel = FALSE;
 			sp = DataPlayer(P);
 			ss = SkillSet(s);
+
+			BUFF_AKTIF = "Tidak ada.";
 
 			if (Round > 1)
 			{
@@ -158,7 +161,7 @@ int main(int argc, char const *argv[])
 			while (!isEndTurn)
 			{
 				printf("\n[%s] >>> ", Name(DataPlayer(P)));	// Show which player is playing
-				scanf("%s", &com);							// Input command
+				scanf("%s", &com);									// Input command
 
 				if (strcmp(com, "SKILL") == 0)
 				{
@@ -187,11 +190,15 @@ int main(int argc, char const *argv[])
 				}
 				else if (strcmp(com, "ENDTURN") == 0)
 				{
-					ENDTURN(&S, Ts, Tp, &P, &s);
+					ENDTURN(&S, Ts, Tp, &P, &s, &ss);
 				}
 				else if (strcmp(com, "UNDO") == 0)
 				{
 					UNDO(&S, &Tp, &Ts, &P, &s);
+				}
+				else
+				{
+					printf("Input tidak valid.\n");
 				}
 			}
 
