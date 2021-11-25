@@ -145,7 +145,7 @@ void INSPECT (Map M, ArrayOfTeleporter AoT)
 /* Menampilkan apakah petak kosong, terlarang, atau berteleporter */
 {
     int in, i;
-    printf("ID Petak >>>");
+    printf("ID Petak >>> ");
     scanf("%d", &in);
 
     for (i = 0; i < NEff(AoT); i++)
@@ -156,7 +156,7 @@ void INSPECT (Map M, ArrayOfTeleporter AoT)
         }
     }
 
-    printf("Bentuk petak: %c\n", Petak(M,i-1));
+    printf("Bentuk petak: %c\n", Petak(M,in-1));
 }
 
 void ROLL (Map M, ArrayOfTeleporter AoT, Player *P, sPlayer *sp, int X)
