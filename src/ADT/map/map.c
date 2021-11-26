@@ -98,16 +98,18 @@ void Config()
 	
 	FILE * F;
 	char c[100];
-	int i;
+	int i, in;
 
 	F = fopen("../data/config.txt", "w");
-	
+	getchar();
+
 	for (i = 0; i < 4; i++) {
 		fgets(c, sizeof(c), stdin);
 		fputs(c, F);
+		in = atoi(c);
 	}
 
-	for (i = 0; i < atoi(c); i++) {
+	for (i = 0; i < in; i++) {
 		fgets(c, sizeof(c), stdin);
 		fputs(c, F);	
 	}
