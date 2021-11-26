@@ -16,7 +16,7 @@ extern boolean isEndTurn;  // Apakah player sudah ENDTURN
 extern boolean isNotRoll;  // Apakah player belum ROLL
 extern boolean immuneTel;  // Apakah sudah mengaktifkan # Imunitas Teleport #
 
-void SKILL (TabPlayer *Tp, TabSkill *Ts, Skill *s, sPlayer *sp, sSkill *ss, int X);
+void SKILL (TabPlayer *Tp, TabSkill *Ts, Map M, Player *P, Skill *s, sPlayer *sp, sSkill *ss, int X, boolean *isPlaying);
 /* Menampilkan skillyang DIMILIKI pemain dengan Turn(P) = X */
 /* Pemain dapat memilih untuk keluar, membuang, atau menggunakan skill */
 

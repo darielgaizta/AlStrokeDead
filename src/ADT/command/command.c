@@ -15,7 +15,7 @@ boolean isNotRoll = TRUE ;  // Apakah player belum ROLL
 boolean immuneTel = FALSE;  // Apakah sudah mengaktifkan # Imunitas Teleport #
 
 
-void SKILL (TabPlayer *Tp, TabSkill *Ts, Skill *s, sPlayer *sp, sSkill *ss, int X)
+void SKILL (TabPlayer *Tp, TabSkill *Ts, Map M, Player *P, Skill *s, sPlayer *sp, sSkill *ss, int X, boolean *isPlaying)
 /* Menampilkan skillyang DIMILIKI pemain dengan Turn(P) = X */
 /* Pemain dapat memilih untuk keluar, membuang, atau menggunakan skill */
 {
@@ -102,6 +102,76 @@ void SKILL (TabPlayer *Tp, TabSkill *Ts, Skill *s, sPlayer *sp, sSkill *ss, int 
                 printf("Anda tidak bisa menggunakan skill karena Anda memiliki buff %s.\n", BUFF_AKTIF);
             }
         }
+        else if (strcmp(ElmtSkill(*ss, in-1), "Mesin Waktu") == 0)
+        {
+            int Y, PP2, x, val;
+            printf("Mesin Waktu diaktifkan. Pilih pemain yang ingin dimundurkan!\n");
+            printf("(ID Pemain) >>> ");
+            scanf("%d", &Y);
+
+            if (Y != X)
+            {
+                Player P1 = SearchPlayer(*Tp, X);
+                Player P2 = SearchPlayer(*Tp, Y);
+                PP2 = Position(DataPlayer(P2));
+
+                val = (rand() % MaxRoll) + 1;
+                printf("Mesin Waktu mengeluarkan angka %d\n", val);
+                x = PP2 - val;
+                if ((x > 0) && (Petak(M,(x-1))!='#'))
+                {
+                    Move(&P2, Y, x);
+                    printf("'Sore o shinaide.. yamete kudasai, %s!! Kyaaa~~' -%s\n", Name(DataPlayer(P1)), Name(DataPlayer(P2)));
+                }
+                else
+                {
+                    printf("Tidak ada petak yang tersedia untuk %s.\n", Name(DataPlayer(P2)));
+                }
+                DelSkill(ss, in);
+            }
+            else
+            {
+                printf("%s tidak bisa digunakan ke diri sendiri!\n", ElmtSkill(*ss, in-1));
+            }
+        }
+        else if (strcmp(ElmtSkill(*ss, in-1), "Baling-Baling Jambu") == 0)
+        {
+            int Y, PP2, x, val;
+            printf("Baling-Baling Jambu diaktifkan. Pilih pemain yang ingin dimajukan!\n");
+            printf("(ID Pemain) >>> ");
+            scanf("%d", &Y);
+
+            if (Y != X)
+            {
+                Player P1 = SearchPlayer(*Tp, X);
+                Player P2 = SearchPlayer(*Tp, Y);
+                PP2 = Position(DataPlayer(P2));
+
+                val = (rand() % MaxRoll) + 1;
+                printf("Baling-Baling Jambu mengeluarkan angka %d\n", val);
+                x = PP2 + val;
+                if ((x > 0) && (Petak(M,(x-1))!='#'))
+                {
+                    Move(&P2, Y, x);
+                    printf("'Yatta~~ kimochi.. ne %s?' -%s\n", Name(DataPlayer(P1)), Name(DataPlayer(P2)));
+                    if (Position(DataPlayer(P2)) == NEff(M))
+                    {
+                        isEndTurn  = TRUE ;
+                        *isPlaying = FALSE;
+                        *P = P2;
+                    }
+                }
+                else
+                {
+                    printf("Tidak ada petak yang tersedia untuk %s.\n", Name(DataPlayer(P2)));
+                }
+                DelSkill(ss, in);
+            }
+            else
+            {
+                printf("%s tidak bisa digunakan ke diri sendiri!\n", ElmtSkill(*ss, in-1));
+            }
+        }
     }
     else
     {
@@ -175,13 +245,13 @@ void ROLL (Map M, ArrayOfTeleporter AoT, Player *P, sPlayer *sp, int X)
 
         int ds = 0;
         int d1 = Position(*sp) + val, d2 = Position(*sp) - val;
-        if ((d1 > 0) && (d1 < NEff(M)) && (Petak(M,d1-1) != '#'))
+        if ((d1 > 0) && (d1 <= NEff(M)) && (Petak(M,d1-1) != '#'))
         {
             printf("[1] Petak %d\n", d1);
             forward = TRUE;
             ds++;
         }
-        if ((d2 > 0) && (d2 < NEff(M)) && (Petak(M,d2-1) != '#'))
+        if ((d2 > 0) && (d2 <= NEff(M)) && (Petak(M,d2-1) != '#'))
         {
             printf("[2] Petak %d\n", d2);
             backward = TRUE;
@@ -255,25 +325,28 @@ void ENDTURN (State *S, TabSkill Ts, TabPlayer Tp, Player *P, Skill *s, sSkill *
 /* Menandakan turn pemain telah berakhir dan berganti ke NextPlayer(P) */
 /* Apabila pemain terakhir ENDTURN, state ronde akan dipush ke stack S */
 {
-    if (!isNotRoll){
-        isEndTurn = TRUE;
-        SkillSet(*s) = *ss; // Update skill (GLOBALLY).
-        if (LastPlayer(Tp) == *P)
-        {
-            Push(S, Tp, Ts);
-            *P = FirstPlayer(Tp);
-            *s = First(Ts);
-            Round++;
+    if (!isEndTurn)
+    {
+        if (!isNotRoll){
+            isEndTurn = TRUE;
+            SkillSet(*s) = *ss; // Update skill (GLOBALLY).
+            if (LastPlayer(Tp) == *P)
+            {
+                Push(S, Tp, Ts);
+                *P = FirstPlayer(Tp);
+                *s = First(Ts);
+                Round++;
+            }
+            else
+            {
+                *P = NextPlayer(*P);
+                *s = Next(*s);
+            }
         }
         else
         {
-            *P = NextPlayer(*P);
-            *s = Next(*s);
+            printf("Silakan ROLL terlebih dahulu!\n");
         }
-    }
-    else
-    {
-        printf("Silakan ROLL terlebih dahulu!\n");
     }
 }
 

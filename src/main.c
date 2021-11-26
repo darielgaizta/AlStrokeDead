@@ -165,7 +165,7 @@ int main(int argc, char const *argv[])
 
 				if (strcmp(com, "SKILL") == 0)
 				{
-					SKILL(&Tp, &Ts, &s, &sp, &ss, Turn(P));
+					SKILL(&Tp, &Ts, M, &P, &s, &sp, &ss, Turn(P), &isPlaying);
 				}
 				else if (strcmp(com, "MAP") == 0)
 				{
@@ -182,11 +182,6 @@ int main(int argc, char const *argv[])
 				else if (strcmp(com, "ROLL") == 0)
 				{
 					ROLL(M, AoT, &P, &sp, Turn(P));
-					if (Position(DataPlayer(P)) == NEff(M))
-					{
-						isPlaying = FALSE;
-						isEndTurn = TRUE ;
-					}
 				}
 				else if (strcmp(com, "ENDTURN") == 0)
 				{
@@ -200,6 +195,13 @@ int main(int argc, char const *argv[])
 				{
 					printf("Input tidak valid.\n");
 				}
+
+				if (Position(DataPlayer(P)) == NEff(M))
+				{
+					isPlaying = FALSE;
+					isEndTurn = TRUE ;
+				}
+
 			}
 
 			/* End Game: isPlaying == FALSE */

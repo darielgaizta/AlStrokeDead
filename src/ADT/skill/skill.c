@@ -123,23 +123,31 @@ void ShowSkill(sSkill S)
 char * GenerateSkill(Skillnb X)
 /* Menghasilkan nama skill yang di-randomized */
 {
+    int jml_skill   = 8;
+    int arr_skill[] = {0,1,2,3,4,5,6,7};
+    int fre_skill[] = {4,6,10,15,15,30,10,10};
+
     char * n;
-    srand(time(0));
-    int rint = rand();
-    if ((rint % 6) == 0) {
+    srand(time(NULL));
+    int rint = Randomize(arr_skill, fre_skill, jml_skill);
+    if (rint == 0) {
         n = "Mesin Penukar Posisi";
-    } else if ((rint % 6) == 1) {
+    } else if (rint == 1) {
         n = "Cermin Pengganda";
-    } else if ((rint % 6) == 2) {
+    } else if (rint == 2) {
         n = "Pintu Ga Ke Mana Mana";
-    } else if ((rint % 6) == 3) {
+    } else if (rint == 3) {
         n = "Senter Pengecil Hoki";
-    } else if ((rint % 6) == 4) {
+    } else if (rint == 4) {
         n = "Senter Pembesar Hoki";
-    } else if ((rint % 6) == 5) {
+    } else if (rint == 5) {
         n = "Teknologi Gagal (Junk)";
+    } else if (rint == 6) {
+        n = "Mesin Waktu";
+    } else if (rint == 7) {
+        n = "Baling-Baling Jambu";
     }
-    printf("Congratulations Player %d! You get: %s (Skill ID: %d)\n", X, n, rint);
+    printf("Congratulations Player %d! You get: %s\n", X, n);
     return n;
 }
 
@@ -152,7 +160,7 @@ void GenerateBuff(TabSkill L, Skillnb X)
         S = Next(S);
     }
 
-    srand(time(0));
+    srand(time(NULL));
     int rint = rand();
     sSkill ss = SkillSet(S);
     int sval = (rint % 10) % 4;
@@ -397,3 +405,35 @@ void PrintBackward (TabSkill L){
 /* Contoh : jika ada tiga elemen bernilai 1, 20, 30 akan dicetak: [30,20,1] */
 /* Jika list kosong : menulis [] */
 /* Tidak ada tambahan karakter apa pun di awal, akhir, atau di tengah */
+
+int GetCeiling(int arr[], int r, int l, int h)
+/* Menghasilkan nilai ceil dari r di arr[l..h] */
+{
+    int mid;
+    while (l < h)
+    {
+        mid = l + ((h - l) >> 1); // ~mid = (l+h)/2
+        (r > arr[mid]) ? (l = mid + 1) : (h = mid);
+    }
+    return (arr[l] >= r) ? l : -1;
+}
+
+int Randomize(int arr[], int freq[], int n)
+/* Menghasilkan int dari arr berdasarkan probabilitas frekuensi */
+/* Misal: arr = [1,2,3], freq = [2,6,2]
+   Maka, probabilitas kemunculan angka 3 adalah 2/10 atau 20% */
+{
+    // Create and fill prefix array
+    int prefix[n], i;
+    prefix[0] = freq[0];
+    for (i = 1; i < n; ++i)
+        prefix[i] = prefix[i - 1] + freq[i];
+ 
+    // prefix[n-1] is sum of all frequencies. Generate a random number
+    // with value from 1 to this sum
+    int r = (rand() % prefix[n - 1]) + 1;
+ 
+    // Find index of ceiling of r in prefix array
+    int indexc = GetCeiling(prefix, r, 0, n - 1);
+    return arr[indexc];
+}
