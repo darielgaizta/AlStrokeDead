@@ -62,7 +62,7 @@ int main(int argc, char const *argv[])
 	printf("Each player will start from Petak 1 and finish at the final Petak. While in the game, players can use their skill, buff, and move to another Petak using Teleporter. ");
 	printf("The game will end if we have one player who has reached the final Petak. For further information, please check our documentation. Good luck!\n");
 
-	printf("\n([0] Exit [1] New Game) >>> ");
+	printf("\n([0] Exit [1] New Game [2] Load Game) >>> ");
 	scanf("%d", &in);
 
 	if (in)
@@ -79,49 +79,70 @@ int main(int argc, char const *argv[])
 		CreateEmpty(&Ts);			// Init. Ts
 		CreateEmptyState(&S);	// Init S
 
-		Config();					// Set config
-		LoadMap(&M, &AoT);		// Init map
+		if (in != 2)
+		{
+			Config();				// Set config
+		}
+		
+		LoadMap(&M, &AoT);		// Init map, Load Game ~ baca config.txt lama
 
 		/* ========================================|  Opening  |======================================== */
 
 		int i, j;
 
-		printf("\nNumber of Players (Max. 4 Players): ");
-		scanf("%d", &in);
+		if (in != 2){
+			printf("\nNumber of Players (Max. 4 Players): ");
+			scanf("%d", &in);
 
-		printf("\n=======================|  Pick Your Hero!  |==================================\n");
-		printf("[1] Mobita-kun [2] Emon-san [3] Jayen-sama [4] Suzuka-chan [5] Shizuneo-senpai\n");
+			printf("\n=======================|  Pick Your Hero!  |==================================\n");
+			printf("[1] Mobita-kun [2] Emon-san [3] Jayen-sama [4] Suzuka-chan [5] Shizuneo-senpai\n");
 
-		for (i = 0; i < in; i++)
+			for (i = 0; i < in; i++)
+			{
+				printf("Masukkan nama pemain ke-%d: ", (i+1));
+				scanf("%d", &j);
+
+				if (j == 1)
+				{
+					InsVLast(&Ts, (i+1));
+					AddPlayer(&Tp, (i+1), "Mobita-kun");
+				}
+				else if (j == 2)
+				{
+					InsVLast(&Ts, (i+1));
+					AddPlayer(&Tp, (i+1), "Emon-san");
+				}
+				else if (j == 3)
+				{
+					InsVLast(&Ts, (i+1));
+					AddPlayer(&Tp, (i+1), "Jayen-sama");
+				}
+				else if (j == 4)
+				{
+					InsVLast(&Ts, (i+1));
+					AddPlayer(&Tp, (i+1), "Suzuka-chan");
+				}
+				else if (j == 5)
+				{
+					InsVLast(&Ts, (i+1));
+					AddPlayer(&Tp, (i+1), "Shizuneo-senpai");
+				}
+			}
+		}
+		else
 		{
-			printf("Masukkan nama pemain ke-%d: ", (i+1));
-			scanf("%d", &j);
-
-			if (j == 1)
+			/* Load data player dan data skill */
+			printf("Loading data...\n");
+			LoadPlayer(&Tp);
+			LoadSkill(&Ts);
+			if (IsEmptyPlayer(Tp))
 			{
-				InsVLast(&Ts, (i+1));
-				AddPlayer(&Tp, (i+1), "Mobita-kun");
+				printf("Data tidak ditemukan.\nSilakan tutup program, buka lagi, dan mulai permainan baru dengan memilih [1] New Game\n");
+				printf("[Input any key to exit] >>> ");
+				scanf("%d", &in);
+				exit(0);
 			}
-			else if (j == 2)
-			{
-				InsVLast(&Ts, (i+1));
-				AddPlayer(&Tp, (i+1), "Emon-san");
-			}
-			else if (j == 3)
-			{
-				InsVLast(&Ts, (i+1));
-				AddPlayer(&Tp, (i+1), "Jayen-sama");
-			}
-			else if (j == 4)
-			{
-				InsVLast(&Ts, (i+1));
-				AddPlayer(&Tp, (i+1), "Suzuka-chan");
-			}
-			else if (j == 5)
-			{
-				InsVLast(&Ts, (i+1));
-				AddPlayer(&Tp, (i+1), "Shizuneo-senpai");
-			}
+			printf("\nData successfully loaded.\n");
 		}
 
 		ShowPlayer(Tp);
@@ -132,7 +153,7 @@ int main(int argc, char const *argv[])
 		
 		Round = 1;
 		boolean isPlaying = TRUE;			// Apakah game masih berlanjut
-		Player P = FirstPlayer(Tp);			// Pemain
+		Player P = FirstPlayer(Tp);		// Pemain
 		Skill  s = First(Ts);				// Skill pemain
 
 		sPlayer sp;							// Data pemain
@@ -190,6 +211,10 @@ int main(int argc, char const *argv[])
 				else if (strcmp(com, "UNDO") == 0)
 				{
 					UNDO(&S, &Tp, &Ts, &P, &s);
+				}
+				else if (strcmp(com, "SAVE") == 0)
+				{
+					SAVE(Tp, Ts);
 				}
 				else
 				{

@@ -116,4 +116,11 @@ void ShowPlayer (TabPlayer T);
 /* Jika list kosong : menulis [] */
 /* Tidak ada tambahan karakter apa pun di awal, akhir, atau di tengah */
 
+void WriteBackupDataPlayer(TabPlayer Tp);
+/* Menyimpan data pemain: Name & Position */
+/* Data disimpan ke dalam backup_player.txt */
+
+void LoadPlayer(TabPlayer *Tp);
+/* Membaca backup_player.txt dan load semua data */
+
 #endif

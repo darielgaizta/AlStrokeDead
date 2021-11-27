@@ -169,4 +169,14 @@ void PrintBackward (TabSkill L);
 /* Jika list kosong : menulis [] */
 /* Tidak ada tambahan karakter apa pun di awal, akhir, atau di tengah */
 
+void WriteBackupDataSkill(TabSkill Ts);
+/* Menyimpan data skill: aSkill & NEff */
+/* Data disimpan ke dalam backup_skill.txt */
+/* Baris ke-1: Banyaknya skill (M)
+   M baris selanjutnya berisi nama skill */
+/* Pencatatan dilanjutkan sampai S = Nil */
+
+void LoadSkill(TabSkill *Ts);
+/* Load semua skill yang dimiliki pemain */
+
 #endif

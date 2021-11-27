@@ -128,7 +128,7 @@ char * GenerateSkill(Skillnb X)
     int fre_skill[] = {4,6,10,15,15,30,10,10};
 
     char * n;
-    srand(time(NULL));
+    srand(time(Nil));
     int rint = Randomize(arr_skill, fre_skill, jml_skill);
     if (rint == 0) {
         n = "Mesin Penukar Posisi";
@@ -436,4 +436,132 @@ int Randomize(int arr[], int freq[], int n)
     // Find index of ceiling of r in prefix array
     int indexc = GetCeiling(prefix, r, 0, n - 1);
     return arr[indexc];
+}
+
+void WriteBackupDataSkill(TabSkill Ts)
+/* Menyimpan data skill: aSkill & NEff */
+/* Data disimpan ke dalam backup_skill.txt */
+/* X adalah JML_PEMAIN dalam string */
+{
+    FILE *F;
+    int i;
+    char len[5];
+
+    F = fopen("../data/backup_skill.txt", "w");
+
+    Skill S = First(Ts);
+    sSkill ss;
+
+    while (S != Nil)
+    {
+        ss = SkillSet(S);
+        sprintf(len, "%d", LenSkill(ss));
+        fputs(len, F);
+        fputs("\n",F);
+
+        for (i = 0; i < LenSkill(ss); i++)
+        {
+            if (strcmp(ElmtSkill(ss, i), "Mesin Penukar Posisi") == 0)
+            {
+                fputs("0", F);
+            }
+            else if (strcmp(ElmtSkill(ss, i), "Cermin Pengganda") == 0)
+            {
+                fputs("1", F);
+            }
+            else if (strcmp(ElmtSkill(ss, i), "Pintu Ga Ke Mana Mana") == 0)
+            {
+                fputs("2", F);
+            }
+            else if (strcmp(ElmtSkill(ss, i), "Senter Pengecil Hoki") == 0)
+            {
+                fputs("3", F);
+            }
+            else if (strcmp(ElmtSkill(ss, i), "Senter Pembesar Hoki") == 0)
+            {
+                fputs("4", F);
+            }
+            else if (strcmp(ElmtSkill(ss, i), "Teknologi Gagal (Junk)") == 0)
+            {
+                fputs("5", F);
+            }
+            else if (strcmp(ElmtSkill(ss, i), "Mesin Waktu") == 0)
+            {
+                fputs("6", F);
+            }
+            else if (strcmp(ElmtSkill(ss, i), "Baling-Baling Jambu") == 0)
+            {
+                fputs("7", F);
+            }
+
+            fputs("\n", F);
+        }
+        S = Next(S);
+    }
+    
+    fclose(F);
+}
+
+void LoadSkill(TabSkill *Ts)
+/* Load semua skill yang dimiliki pemain */
+{
+    FILE *F;
+    char buffer[10];
+    int counter = 1;
+    int i, j;
+
+    F = fopen("../data/backup_skill.txt", "r");
+
+    if (F != Nil)
+    {
+        while (fgets(buffer, sizeof(buffer), F))
+        {
+            InsVLast(Ts, counter);
+
+            j = atoi(buffer);
+            for (i = 0; i < j; i++)
+            {
+                fgets(buffer, sizeof(buffer), F);
+                if (atoi(buffer) == 0)
+                {
+                    AddSkill(&SkillSet(Last(*Ts)), "Mesin Penukar Posisi");
+                }
+                else if (atoi(buffer) == 1)
+                {
+                    AddSkill(&SkillSet(Last(*Ts)), "Cermin Pengganda");
+                }
+                else if (atoi(buffer) == 2)
+                {
+                    AddSkill(&SkillSet(Last(*Ts)), "Pintu Ga Ke Mana Mana");
+                }
+                else if (atoi(buffer) == 3)
+                {
+                    AddSkill(&SkillSet(Last(*Ts)), "Senter Pengecil Hoki");
+                }
+                else if (atoi(buffer) == 4)
+                {
+                    AddSkill(&SkillSet(Last(*Ts)), "Senter Pembesar Hoki");
+                }
+                else if (atoi(buffer) == 5)
+                {
+                    AddSkill(&SkillSet(Last(*Ts)), "Teknologi Gagal (Junk)");
+                }
+                else if (atoi(buffer) == 6)
+                {
+                    AddSkill(&SkillSet(Last(*Ts)), "Mesin Waktu");
+                }
+                else if (atoi(buffer) == 7)
+                {
+                    AddSkill(&SkillSet(Last(*Ts)), "Baling-Baling Jambu");
+                }
+            }
+            counter++;
+        }
+    }
+    else
+    {
+        printf("Failed to load player's skill.\n");
+    }
+
+    fclose(F);
 }

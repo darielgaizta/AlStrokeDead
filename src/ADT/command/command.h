@@ -43,4 +43,7 @@ void UNDO (State *S, TabPlayer *Tp, TabSkill *Ts, Player *P, Skill *s);
    1. Skill tiap pemain diacak ulang
    2. Posisi tiap pemain diulang. */
 
+void SAVE(TabPlayer Tp, TabSkill Ts);
+/* Menyimpan file backup_player.txt dan backup_skill.txt */
+
 #endif

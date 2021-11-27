@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "player.h"
 
 int JML_PEMAIN = 0;
@@ -221,4 +222,103 @@ void ShowPlayer (TabPlayer T)
     }
     printf("]\n");
     printf("Jumlah pemain\t: %d\n", JML_PEMAIN);
+}
+
+void WriteBackupDataPlayer(TabPlayer Tp)
+/* Menyimpan data pemain: Name & Position */
+/* Data disimpan ke dalam backup_player.txt */
+{
+	FILE *F;
+	char pos[3];
+
+	F = fopen("../data/backup_player.txt", "w");
+
+	Player P = FirstPlayer(Tp);
+	sPlayer sp;
+
+	while (P != Nil)
+	{
+		sp = DataPlayer(P);
+		
+		if (strcmp(Name(sp), "Mobita-kun") == 0)
+		{
+			fputs("1", F);
+		}
+		else if (strcmp(Name(sp), "Emon-san") == 0)
+		{
+			fputs("2", F);
+		}
+		else if (strcmp(Name(sp), "Jayen-sama") == 0)
+		{
+			fputs("3", F);
+		}
+		else if (strcmp(Name(sp), "Suzuka-chan") == 0)
+		{
+			fputs("4", F);
+		}
+		else if (strcmp(Name(sp), "Shizuneo-senpai") == 0)
+		{
+			fputs("5", F);
+		}
+		fputs("\n", F);
+		sprintf(pos, "%d", Position(sp));
+		fputs(pos, F);
+		fputs("\n", F);
+		P = NextPlayer(P);
+	}
+	
+	fclose(F);
+}
+
+void LoadPlayer(TabPlayer *Tp)
+/* Membaca backup_player.txt dan load semua data */
+{
+	FILE *F;
+	char buffer[10];
+	int counter = 1;
+	int i = 1;
+
+	F = fopen("../data/backup_player.txt", "r");
+
+	if (F != Nil)
+	{
+		while (fgets(buffer, sizeof(buffer), F))
+		{
+			if ((counter % 2) != 0)
+			{
+				if (atoi(buffer) == 1)
+				{
+					AddPlayer(Tp, (i+1), "Mobita-kun");
+				}
+				else if (atoi(buffer) == 2)
+				{
+					AddPlayer(Tp, (i+1), "Emon-san");
+				}
+				else if (atoi(buffer) == 3)
+				{
+					AddPlayer(Tp, (i+1), "Jayen-sama");
+				}
+				else if (atoi(buffer) == 4)
+				{
+					AddPlayer(Tp, (i+1), "Suzuka-chan");
+				}
+				else if (atoi(buffer) == 5)
+				{
+					AddPlayer(Tp, (i+1), "Shizuneo-senpai");
+				}
+				i++;
+			}
+			else
+			{
+				Position(DataPlayer(LastPlayer(*Tp))) = atoi(buffer);
+			}
+			counter++;
+		}
+	}
+	else
+	{
+		printf("Failed to load player's data.\n");
+	}
+
+	fclose(F);
 }

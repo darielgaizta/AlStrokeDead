@@ -172,6 +172,10 @@ void SKILL (TabPlayer *Tp, TabSkill *Ts, Map M, Player *P, Skill *s, sPlayer *sp
                 printf("%s tidak bisa digunakan ke diri sendiri!\n", ElmtSkill(*ss, in-1));
             }
         }
+        else
+        {
+            printf("'Nani kore?!?!?' -%s\n", Name(*sp));
+        }
     }
     else
     {
@@ -355,20 +359,35 @@ void UNDO (State *S, TabPlayer *Tp, TabSkill *Ts, Player *P, Skill *s)
    1. Skill tiap pemain diacak ulang
    2. Posisi tiap pemain diulang. */
 {
-    int in;
-    printf("Yakin ingin UNDO?\n");
-    printf("([0] Tidak [1] Ya!) >>> ");
-    scanf("%d", &in);
-
-    if (in)
+    if (!IsEmptyState(*S))
     {
-        Pop(S, Tp, Ts);
-        *P = FirstPlayer(*Tp);
-        *s = First(*Ts);
-        isEndTurn = TRUE;
+        int in;
+        printf("Yakin ingin UNDO?\n");
+        printf("([0] Tidak [1] Ya!) >>> ");
+        scanf("%d", &in);
+
+        if (in)
+        {
+            Pop(S, Tp, Ts);
+            *P = FirstPlayer(*Tp);
+            *s = First(*Ts);
+            isEndTurn = TRUE;
+        }
+        else
+        {
+            printf("UNDO dibatalkan.\n");
+        }
     }
     else
     {
-        printf("UNDO dibatalkan.\n");
+        printf("Tidak bisa UNDO karena stack State kosong.\n");
     }
+}
+
+void SAVE(TabPlayer Tp, TabSkill Ts)
+/* Menyimpan file backup_player.txt dan backup_skill.txt */
+{
+    WriteBackupDataPlayer(Tp);
+    WriteBackupDataSkill(Ts);
+    printf("Data saved.\n");
 }
