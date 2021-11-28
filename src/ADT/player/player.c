@@ -276,7 +276,7 @@ void LoadPlayer(TabPlayer *Tp)
 	FILE *F;
 	char buffer[10];
 	int counter = 1;
-	int i = 1;
+	int i = 0;
 
 	F = fopen("../data/backup_player.txt", "r");
 

@@ -118,3 +118,51 @@ void Config()
 
 	fclose(F);
 }
+
+void WriteBackupDataConfig()
+/* Copy-paste config.txt ke backup_config.txt */
+{
+	FILE *f1;
+	FILE *f2;
+	char buffer[100];
+
+	f1 = fopen("../data/config.txt", "r");
+	f2 = fopen("../data/backup_config.txt", "w");
+
+	if (f1 != Nil)
+	{
+		while (fgets(buffer, sizeof(buffer), f1))
+		{
+			fputs(buffer, f2);
+		}
+	}
+
+	fclose(f1);
+	fclose(f2);
+}
+
+void LoadConfig()
+/* Load backup_config.txt ke config.txt */
+{
+	FILE *f1;
+	FILE *f2;
+	char buffer[100];
+
+	f2 = fopen("../data/config.txt", "w");
+	f1 = fopen("../data/backup_config.txt", "r");
+
+	if (f1 != Nil)
+	{
+		while (fgets(buffer, sizeof(buffer), f1))
+		{
+			fputs(buffer, f2);
+		}
+	}
+	else
+	{
+		printf("Failed to load configuration.\n");
+	}
+
+	fclose(f1);
+	fclose(f2);
+}

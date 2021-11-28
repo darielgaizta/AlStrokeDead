@@ -83,8 +83,6 @@ int main(int argc, char const *argv[])
 		{
 			Config();				// Set config
 		}
-		
-		LoadMap(&M, &AoT);		// Init map, Load Game ~ baca config.txt lama
 
 		/* ========================================|  Opening  |======================================== */
 
@@ -133,11 +131,12 @@ int main(int argc, char const *argv[])
 		{
 			/* Load data player dan data skill */
 			printf("Loading data...\n");
-			LoadPlayer(&Tp);
-			LoadSkill(&Ts);
+			LoadPlayer(&Tp);		// Load player from backup_player.txt 
+			LoadSkill(&Ts);		// Load skill from backup_skill.txt
+			LoadConfig();			// Load config from backup_config.txt
 			if (IsEmptyPlayer(Tp))
 			{
-				printf("Data tidak ditemukan.\nSilakan tutup program, buka lagi, dan mulai permainan baru dengan memilih [1] New Game\n");
+				printf("\nData tidak ditemukan.\nSilakan tutup program, buka lagi, dan mulai permainan baru dengan memilih [1] New Game\n");
 				printf("[Input any key to exit] >>> ");
 				scanf("%d", &in);
 				exit(0);
@@ -146,6 +145,7 @@ int main(int argc, char const *argv[])
 		}
 
 		ShowPlayer(Tp);
+		LoadMap(&M, &AoT);	// Init map, Load Game ~ baca config.txt
 
 		/* ========================================| Game play |======================================== */
 

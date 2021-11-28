@@ -63,14 +63,21 @@ void SKILL (TabPlayer *Tp, TabSkill *Ts, Map M, Player *P, Skill *s, sPlayer *sp
             printf("Masukkan ID (Turn) pemain yang ingin ditukar posisinya dengan Anda!\nID Pemain >>> ");
             scanf("%d", &Y);
 
-            Player P1 = SearchPlayer(*Tp, X);
-            Player P2 = SearchPlayer(*Tp, Y);
-            PP1 = Position(DataPlayer(P1));
-            PP2 = Position(DataPlayer(P2));
-            Move(&P1, X, PP2);
-            Move(&P2, Y, PP1);
-            Position(*sp) = Position(DataPlayer(P1));
-            DelSkill(ss, in);
+            if ((Y != X) && (Y > 0) && (Y <= JML_PEMAIN))
+            {
+                Player P1 = SearchPlayer(*Tp, X);
+                Player P2 = SearchPlayer(*Tp, Y);
+                PP1 = Position(DataPlayer(P1));
+                PP2 = Position(DataPlayer(P2));
+                Move(&P1, X, PP2);
+                Move(&P2, Y, PP1);
+                Position(*sp) = Position(DataPlayer(P1));
+                DelSkill(ss, in);
+            }
+            else
+            {
+                printf("ID pemain tidak valid (Jumlah pemain: %d).\n", JML_PEMAIN);
+            }
         }
         else if (strcmp(ElmtSkill(*ss, in-1), "Senter Pengecil Hoki") == 0)
         {
@@ -109,7 +116,7 @@ void SKILL (TabPlayer *Tp, TabSkill *Ts, Map M, Player *P, Skill *s, sPlayer *sp
             printf("(ID Pemain) >>> ");
             scanf("%d", &Y);
 
-            if (Y != X)
+            if ((Y != X) && (Y > 0) && (Y <= JML_PEMAIN))
             {
                 Player P1 = SearchPlayer(*Tp, X);
                 Player P2 = SearchPlayer(*Tp, Y);
@@ -131,7 +138,14 @@ void SKILL (TabPlayer *Tp, TabSkill *Ts, Map M, Player *P, Skill *s, sPlayer *sp
             }
             else
             {
-                printf("%s tidak bisa digunakan ke diri sendiri!\n", ElmtSkill(*ss, in-1));
+                if (Y == X)
+                {
+                    printf("%s tidak bisa digunakan ke diri sendiri!\n", ElmtSkill(*ss, in-1));
+                }
+                else
+                {
+                    printf("ID pemain tidak valid (Jumlah pemain: %d).\n", JML_PEMAIN);   
+                }
             }
         }
         else if (strcmp(ElmtSkill(*ss, in-1), "Baling-Baling Jambu") == 0)
@@ -141,7 +155,7 @@ void SKILL (TabPlayer *Tp, TabSkill *Ts, Map M, Player *P, Skill *s, sPlayer *sp
             printf("(ID Pemain) >>> ");
             scanf("%d", &Y);
 
-            if (Y != X)
+            if ((Y != X) && (Y > 0) && (Y <= JML_PEMAIN))
             {
                 Player P1 = SearchPlayer(*Tp, X);
                 Player P2 = SearchPlayer(*Tp, Y);
@@ -169,7 +183,14 @@ void SKILL (TabPlayer *Tp, TabSkill *Ts, Map M, Player *P, Skill *s, sPlayer *sp
             }
             else
             {
-                printf("%s tidak bisa digunakan ke diri sendiri!\n", ElmtSkill(*ss, in-1));
+                if (Y == X)
+                {
+                    printf("%s tidak bisa digunakan ke diri sendiri!\n", ElmtSkill(*ss, in-1));
+                }
+                else
+                {
+                    printf("ID pemain tidak valid (Jumlah pemain: %d).\n", JML_PEMAIN);
+                }
             }
         }
         else
@@ -396,5 +417,6 @@ void SAVE(TabPlayer Tp, TabSkill Ts)
 {
     WriteBackupDataPlayer(Tp);
     WriteBackupDataSkill(Ts);
+    WriteBackupDataConfig();
     printf("Data saved.\n");
 }

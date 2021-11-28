@@ -40,4 +40,7 @@ void LoadMap(Map *M, ArrayOfTeleporter *AoT);
 void Config();
 /* Menuliskan konfigurasi.txt berdasarkan format yang disediakan */
 
+void WriteBackupDataConfig();
+/* Copy-paste config.txt ke backup_config.txt */
+
 #endif
