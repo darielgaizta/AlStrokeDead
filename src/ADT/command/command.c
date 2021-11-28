@@ -222,15 +222,22 @@ void INSPECT (Map M, ArrayOfTeleporter AoT)
     printf("ID Petak >>> ");
     scanf("%d", &in);
 
-    for (i = 0; i < NEff(AoT); i++)
+    if ((in <= NEff(M)) && (in > 0))
     {
-        if (TelIn(AoT,i) == in)
+        for (i = 0; i < NEff(AoT); i++)
         {
-            printf("Petak %d memiliki teleporter menuju %d\n", TelIn(AoT,i), TelOut(AoT,i));
+            if (TelIn(AoT,i) == in)
+            {
+                printf("Petak %d memiliki teleporter menuju %d\n", TelIn(AoT,i), TelOut(AoT,i));
+            }
         }
-    }
 
-    printf("Bentuk petak: %c\n", Petak(M,in-1));
+        printf("Bentuk petak: %c\n", Petak(M,in-1));
+    }
+    else
+    {
+        printf("Petak tidak terdefinisi.\n");
+    }
 }
 
 void ROLL (Map M, ArrayOfTeleporter AoT, Player *P, sPlayer *sp, int X)
