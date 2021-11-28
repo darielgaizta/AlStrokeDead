@@ -30,12 +30,12 @@ void SKILL (TabPlayer *Tp, TabSkill *Ts, Map M, Player *P, Skill *s, sPlayer *sp
     {
         /* Keluar */
     }
-    else if (in < 0)
+    else if ((in < 0) && (abs(in) <= LenSkill(*ss)))
     {
         DelSkill(ss, abs(in)); // DEBUG: Need update SkillSet
         printf("Anda telah membuang skill [%d].\n", abs(in));
     }
-    else if (in > 0)
+    else if ((in > 0) && (in <= LenSkill(*ss)))
     {
         if (strcmp(ElmtSkill(*ss, in-1), "Pintu Ga Ke Mana Mana") == 0)
         {
